@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="notification-container"></div>
+
+    <div class="full-page">
+        <div class="auth-container glass-card">
+            <button class="btn-back" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <h2>Bem-vindo de volta</h2>
+            <p class="text-muted">Faça login para acessar o Manager</p>
+            <form id="form-login">
+                <div class="input-group">
+                    <label>Email</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="login-email" required placeholder="centro@email.com">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Senha</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="login-password" required minlength="12" placeholder="Sua senha (mínimo 12 caracteres)">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Entrar</button>
+            </form>
+            <p class="auth-switch">Não tem uma conta? <a href="signup.html">Cadastre-se</a></p>
+        </div>
+        <div class="bg-shape shape-3"></div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        App.redirectIfAuthenticated();
+
+        document.getElementById('form-login').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Entrando...';
+
+            const email = document.getElementById('login-email').value;
+            const senha = document.getElementById('login-password').value;
+
+            try {
+                const data = await App.request('/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, senha }),
+                });
+
+                // Salvar token JWT
+                localStorage.setItem('manager_token', data.token);
+
+                App.showNotification('Login realizado com sucesso!');
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 1000);
+            } catch (err) {
+                App.showNotification(err.message || 'Email ou senha incorretos', 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Entrar';
+            }
+        });
+    </script>
+</body>
+</html>

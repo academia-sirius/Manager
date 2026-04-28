@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .signup-container {
+            max-width: 600px;
+            margin: 40px auto;
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Color Picker Styling */
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: var(--transition);
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+        input[type="color"]:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+        .input-group textarea {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            padding: 14px 16px;
+            font-size: 1rem;
+            transition: var(--transition);
+            outline: none;
+            resize: vertical;
+            min-height: 100px;
+        }
+        .input-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+        .full-page-scroll {
+            min-height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="notification-container"></div>
+
+    <div class="full-page-scroll">
+        <div class="auth-container signup-container glass-card">
+            <button type="button" class="btn-back" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <h2>Criar Conta</h2>
+            <p class="text-muted">Cadastre seu centro de ensino ou empresa</p>
+            
+            <form id="form-signup" style="margin-top: 30px;">
+                <!-- Dados de Acesso -->
+                <h4 style="text-align: left; margin-bottom: 16px; color: var(--primary);">Dados de Acesso</h4>
+                
+                <div class="input-group">
+                    <label>Email</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="signup-email" required placeholder="centro@email.com">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Senha</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="signup-password" required minlength="12" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-]).{12,}" title="A senha deve ter pelo menos 12 caracteres, incluindo letras maiúsculas, minúsculas, números e caracteres especiais" placeholder="Mínimo 12 caracteres (Maiúsculas, minúsculas, números e símbolos)">
+                    </div>
+                </div>
+
+                <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+
+                <!-- Dados do Centro -->
+                <h4 style="text-align: left; margin-bottom: 16px; color: var(--primary);">Dados do Centro</h4>
+
+                <div class="input-group">
+                    <label>Nome do Centro</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-building"></i>
+                        <input type="text" id="signup-nome" required placeholder="Ex: Academia Sirius">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Área de Atuação</label>
+                    <select id="signup-tipo" required style="cursor: pointer;">
+                        <option value="" disabled selected>Selecione a área do centro</option>
+                        <optgroup label="Tecnologia & Ciências">
+                            <option value="tecnologia">Tecnologia da Informação</option>
+                            <option value="engenharia">Engenharia</option>
+                            <option value="ciencias">Ciências Exatas</option>
+                        </optgroup>
+                        <optgroup label="Negócios & Gestão">
+                            <option value="contabilidade">Contabilidade</option>
+                            <option value="administracao">Administração</option>
+                            <option value="economia">Economia</option>
+                            <option value="marketing">Marketing</option>
+                        </optgroup>
+                        <optgroup label="Saúde & Ciências da Vida">
+                            <option value="saude">Saúde (Medicina, Enfermagem, etc.)</option>
+                            <option value="biologia">Biologia / Ciências Naturais</option>
+                        </optgroup>
+                        <optgroup label="Humanidades & Sociais">
+                            <option value="direito">Direito</option>
+                            <option value="pedagogia">Pedagogia / Educação</option>
+                            <option value="comunicacao">Comunicação / Jornalismo</option>
+                            <option value="artes">Artes / Design</option>
+                        </optgroup>
+                        <optgroup label="Outros">
+                            <option value="outro">Outro</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Logo do Centro (Imagem)</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-upload"></i>
+                        <input type="file" id="signup-logo" accept="image/*" style="padding-top: 10px; cursor: pointer;">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Slogan</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-bullhorn"></i>
+                        <input type="text" id="signup-slogan" placeholder="Uma frase curta que represente o centro">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Descrição (Opcional)</label>
+                    <textarea id="signup-descricao" placeholder="Conte-nos um pouco sobre o centro, foco de ensino e atuação..."></textarea>
+                </div>
+
+                <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+
+                <!-- Identidade Visual -->
+                <h4 style="text-align: left; margin-bottom: 16px; color: var(--primary);">Identidade Visual</h4>
+                <p class="text-muted" style="text-align: left; font-size: 0.85rem; margin-bottom: 16px;">
+                    Escolha as cores que serão usadas em toda a sua plataforma.
+                </p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="input-group">
+                        <label>Cor Primária</label>
+                        <div style="display: flex; gap: 15px; align-items: center;">
+                            <input type="color" id="signup-cor-primaria" value="#6366f1">
+                            <span class="text-muted" style="font-size: 0.9rem;">Destaques e Botões</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Cor Secundária</label>
+                        <div style="display: flex; gap: 15px; align-items: center;">
+                            <input type="color" id="signup-cor-secundaria" value="#ec4899">
+                            <span class="text-muted" style="font-size: 0.9rem;">Acentos e Detalhes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100" style="margin-top: 20px;">Finalizar Cadastro</button>
+            </form>
+            <p class="auth-switch">Já tem uma conta? <a href="login.html">Faça login</a></p>
+        </div>
+        
+        <div class="background-container">
+            <div class="bg-shape shape-1" style="top: -50px; right: -50px;"></div>
+            <div class="bg-shape shape-2" style="bottom: 10%; left: 10%;"></div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        App.redirectIfAuthenticated();
+
+        // Live Preview das cores no cadastro
+        const updateBranding = () => {
+            const corPrimaria = document.getElementById('signup-cor-primaria').value;
+            const corSecundaria = document.getElementById('signup-cor-secundaria').value;
+            App.applyBranding({ corPrimaria, corSecundaria });
+        };
+
+        document.getElementById('signup-cor-primaria').addEventListener('input', updateBranding);
+        document.getElementById('signup-cor-secundaria').addEventListener('input', updateBranding);
+
+        document.getElementById('form-signup').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Criando conta...';
+
+            const formData = new FormData();
+            formData.append('email', document.getElementById('signup-email').value);
+            formData.append('senha', document.getElementById('signup-password').value);
+            formData.append('nome', document.getElementById('signup-nome').value);
+            formData.append('tipo', document.getElementById('signup-tipo').value);
+            formData.append('slogan', document.getElementById('signup-slogan').value);
+            formData.append('descricao', document.getElementById('signup-descricao').value);
+            formData.append('corPrimaria', document.getElementById('signup-cor-primaria').value);
+            formData.append('corSecundaria', document.getElementById('signup-cor-secundaria').value);
+
+            const logoInput = document.getElementById('signup-logo');
+            if (logoInput.files && logoInput.files[0]) {
+                formData.append('logo', logoInput.files[0]);
+            }
+
+            try {
+                await App.request('/auth/signup', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                App.showNotification('Conta criada com sucesso! Faça login para continuar.');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+            } catch (err) {
+                App.showNotification(err.message || 'Erro ao criar conta', 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Finalizar Cadastro';
+            }
+        });
+    </script>
+</body>
+</html>

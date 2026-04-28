@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Avaliação - Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --print-primary: var(--primary, #004a87);
+        }
+
+        .relatorio-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+
+        /* Folha A4 */
+        .a4-page {
+            background: white;
+            color: #333;
+            padding: 50px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            min-height: 297mm;
+            position: relative;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--print-primary);
+            padding-bottom: 20px;
+        }
+
+        .report-logo {
+            max-width: 80px; /* Reduzido de 120px */
+            max-height: 80px;
+            margin-bottom: 10px;
+            object-fit: contain;
+            background: transparent;
+            mix-blend-mode: multiply; /* Ajuda a remover fundos brancos */
+        }
+
+        .report-title {
+            color: var(--print-primary);
+            font-size: 1.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            background: #f1f5f9;
+            color: var(--print-primary);
+            padding: 8px 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 25px 0 15px 0;
+            border-left: 4px solid var(--print-primary);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .info-item {
+            font-size: 0.95rem;
+        }
+
+        .info-item strong {
+            color: #555;
+            display: inline-block;
+            width: 140px;
+        }
+
+        .info-item input {
+            border: none;
+            border-bottom: 1px dotted #ccc;
+            width: calc(100% - 150px);
+            font-size: 1rem;
+            color: #000;
+            outline: none;
+        }
+
+        .info-item input:focus {
+            border-bottom-color: var(--print-primary);
+        }
+
+        /* Tabela de Avaliação */
+        .eval-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .eval-table th, .eval-table td {
+            border: 1px solid #cbd5e1;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .eval-table th {
+            background: #f8fafc;
+            color: var(--print-primary);
+            text-align: center;
+        }
+
+        .eval-table td:not(:first-child) {
+            text-align: center;
+            width: 80px;
+            cursor: pointer;
+        }
+
+        .eval-table tr:hover {
+            background: #f1f5f9;
+        }
+
+        .check-box {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #64748b;
+            border-radius: 4px;
+            display: inline-block;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .check-box.selected {
+            background: var(--print-primary);
+            border-color: var(--print-primary);
+        }
+
+        .check-box.selected::after {
+            content: '✓';
+            color: white;
+            font-size: 14px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .footer-eval {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .signature-box {
+            border-top: 1px solid #333;
+            margin-top: 50px;
+            padding-top: 10px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .nota-final-badge {
+            background: var(--print-primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        /* Floating Actions */
+        .actions-bar {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(8px);
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+
+        @media print {
+            .background-container, .actions-bar, .btn-text {
+                display: none !important;
+            }
+            body {
+                background: white;
+            }
+            .relatorio-container {
+                margin: 0;
+                padding: 0;
+                max-width: 100%;
+            }
+            .a4-page {
+                box-shadow: none;
+                padding: 0;
+            }
+            .eval-table td {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="notification-container"></div>
+    
+    <div class="background-container">
+        <div class="bg-shape shape-1"></div>
+        <div class="bg-shape shape-2"></div>
+    </div>
+
+    <div class="relatorio-container">
+        <button class="btn-text" onclick="history.back()">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </button>
+
+        <div class="a4-page" id="report-content">
+            <header class="report-header">
+                <div id="report-logo-container">
+                    <!-- Logo via JS -->
+                </div>
+                <h1 class="report-title">Relatório Descritivo de Avaliação Global do Estagiário</h1>
+            </header>
+
+            <div class="section-title">1. Identificação do Formando e do Contexto</div>
+            <div class="info-grid">
+                <div class="info-item"><strong>Formando:</strong> <span id="val-nome">...</span></div>
+                <div class="info-item"><strong>Classe/Turma:</strong> <input type="text" id="val-classe" placeholder="Ex: 13ª Classe, Turma A"></div>
+                <div class="info-item"><strong>Período de Estágio:</strong> <input type="text" id="val-periodo" placeholder="De __/__/__ a __/__/__"></div>
+                <div class="info-item"><strong>Total de Horas:</strong> <input type="text" id="val-horas" placeholder="Ex: 400h"></div>
+            </div>
+
+            <div class="section-title">2. Dados da Entidade de Acolhimento</div>
+            <div class="info-grid">
+                <div class="info-item"><strong>Empresa:</strong> <input type="text" id="val-empresa" placeholder="Nome da empresa"></div>
+                <div class="info-item"><strong>Morada:</strong> <input type="text" id="val-morada" placeholder="Endereço"></div>
+                <div class="info-item"><strong>Telefone:</strong> <input type="text" id="val-tel" placeholder="Contacto"></div>
+                <div class="info-item"><strong>E-mail:</strong> <input type="text" id="val-email" placeholder="Email corporativo"></div>
+                <div class="info-item"><strong>Orientador:</strong> <input type="text" id="val-orientador" placeholder="Nome do supervisor"></div>
+                <div class="info-item"><strong>Função/Depto:</strong> <input type="text" id="val-funcao" placeholder="Ex: Diretor de TI"></div>
+            </div>
+
+            <div class="section-title">3. Matriz de Avaliação de Desempenho</div>
+            <table class="eval-table">
+                <thead>
+                    <tr>
+                        <th>Critérios de Avaliação</th>
+                        <th>Excelente</th>
+                        <th>Bom</th>
+                        <th>Satisfaz</th>
+                        <th>Insatisfaz</th>
+                    </tr>
+                </thead>
+                <tbody id="eval-body">
+                    <!-- Gerado via JS -->
+                </tbody>
+            </table>
+
+            <div class="section-title">4. Observações e Validação Final</div>
+            <div style="margin-bottom: 20px;">
+                <strong>Observações:</strong><br>
+                <textarea id="val-obs" style="width:100%; height:80px; margin-top:10px; border:1px solid #ccc; padding:10px; font-family:inherit; resize:none;" placeholder="Comentários sobre o desempenho..."></textarea>
+            </div>
+
+            <div class="footer-eval">
+                <div>
+                    <strong>Avaliação do Orientador (Empresa)</strong>
+                    <div style="margin: 15px 0;">
+                        Nota em valores: <input type="number" id="val-nota-empresa" style="width:60px; border-bottom:1px solid #333; text-align:center;">
+                    </div>
+                    <div class="signature-box">Assinatura do Orientador da Empresa</div>
+                </div>
+                <div>
+                    <strong>Avaliação Final (Escola/Centro)</strong>
+                    <div style="margin: 15px 0;">
+                        Nota Final: <input type="number" id="val-nota-escola" style="width:60px; border-bottom:1px solid #333; text-align:center; font-weight:bold;">
+                    </div>
+                    <div class="signature-box">Assinatura do Professor Orientador</div>
+                </div>
+            </div>
+            
+            <div style="text-align: right; margin-top: 30px; font-size: 0.8rem; color: #999;">
+                Gerado em <span id="current-date-rel"></span> via Manager System
+            </div>
+        </div>
+    </div>
+
+    <div class="actions-bar">
+        <button class="btn btn-outline" onclick="saveReport()">
+            <i class="fa-solid fa-floppy-disk"></i> Salvar Alterações
+        </button>
+        <button class="btn btn-primary" onclick="window.print()">
+            <i class="fa-solid fa-file-pdf"></i> Exportar Relatório
+        </button>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        const params = App.getQueryParams();
+        const turmaId = params.turmaId;
+        const estagiarioId = params.id;
+
+        const criterios = [
+            { id: 'crit1_assiduidade', label: '1. Assiduidade' },
+            { id: 'crit2_pontualidade', label: '2. Pontualidade' },
+            { id: 'crit3_disciplina', label: '3. Disciplina' },
+            { id: 'crit4_empenho', label: '4. Empenho' },
+            { id: 'crit5_maturidade', label: '5. Maturidade' },
+            { id: 'crit6_criatividade', label: '6. Criatividade' },
+            { id: 'crit7_comunicacao', label: '7. Capacidade de Comunicação' },
+            { id: 'crit8_trabalho_equipa', label: '8. Capacidade de Trabalho em Equipa' },
+            { id: 'crit9_apresentacao', label: '9. Apresentação Pessoal' },
+            { id: 'crit10_conhecimentos', label: '10. Conhecimentos Técnicos' },
+            { id: 'crit11_autoconfianca', label: '11. Auto-Confiança' },
+            { id: 'crit12_relacao_sup', label: '12. Relação com Superiores' },
+            { id: 'crit13_relacao_col', label: '13. Relação Com Colegas' },
+            { id: 'crit14_iniciativa', label: '14. Capacidade de Iniciativa' },
+            { id: 'crit15_relatorio', label: '15. Relatório de Estágio' }
+        ];
+
+        const niveis = ['Excelente', 'Bom', 'Satisfaz', 'Insatisfaz'];
+        let currentData = {};
+
+        async function loadReportData() {
+            try {
+                const centro = await App.checkAuth();
+                const est = await App.request(`/turmas/${turmaId}/estagiarios/${estagiarioId}`);
+                currentData = est;
+
+                // Set Logo
+                const logoContainer = document.getElementById('report-logo-container');
+                const logoUrl = App.getLogoUrl(centro.logo);
+                if (logoUrl) {
+                    logoContainer.innerHTML = `<img src="${logoUrl}" class="report-logo">`;
+                }
+
+                // Fill Identification
+                document.getElementById('val-nome').textContent = est.nome;
+                document.getElementById('val-classe').value = est.classe || '';
+                document.getElementById('val-periodo').value = (est.dataInicio && est.dataFim) ? `De ${est.dataInicio} a ${est.dataFim}` : '';
+                document.getElementById('val-horas').value = est.totalHoras || '';
+
+                // Fill Company Info
+                document.getElementById('val-empresa').value = est.empresaNome || '';
+                document.getElementById('val-morada').value = est.empresaMorada || '';
+                document.getElementById('val-tel').value = est.empresaTelefone || '';
+                document.getElementById('val-email').value = est.empresaEmail || '';
+                document.getElementById('val-orientador').value = est.orientadorNome || '';
+                document.getElementById('val-funcao').value = est.orientadorFuncao || '';
+
+                // Observations & Notes
+                document.getElementById('val-obs').value = est.observacoes || '';
+                document.getElementById('val-nota-empresa').value = est.notaEmpresa || '';
+                document.getElementById('val-nota-escola').value = est.notaEscola || '';
+
+                renderMatrix(est);
+                document.getElementById('current-date-rel').textContent = new Date().toLocaleDateString('pt-BR');
+            } catch (err) {
+                console.error(err);
+                App.showNotification('Erro ao carregar relatório', 'error');
+            }
+        }
+
+        function renderMatrix(data) {
+            const body = document.getElementById('eval-body');
+            body.innerHTML = criterios.map(crit => {
+                const value = data[crit.id] || 'Bom';
+                return `
+                    <tr>
+                        <td>${crit.label}</td>
+                        ${niveis.map(nivel => `
+                            <td onclick="selectLevel('${crit.id}', '${nivel}')">
+                                <div class="check-box ${value === nivel ? 'selected' : ''}" id="box-${crit.id}-${nivel}"></div>
+                            </td>
+                        `).join('')}
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function selectLevel(critId, nivel) {
+            currentData[critId] = nivel;
+            // Unselect others in row
+            niveis.forEach(n => {
+                document.getElementById(`box-${critId}-${n}`).classList.remove('selected');
+            });
+            // Select current
+            document.getElementById(`box-${critId}-${nivel}`).classList.add('selected');
+        }
+
+        async function saveReport() {
+            try {
+                const updatedData = {
+                    ...currentData,
+                    classe: document.getElementById('val-classe').value,
+                    totalHoras: document.getElementById('val-horas').value,
+                    empresaNome: document.getElementById('val-empresa').value,
+                    empresaMorada: document.getElementById('val-morada').value,
+                    empresaTelefone: document.getElementById('val-tel').value,
+                    empresaEmail: document.getElementById('val-email').value,
+                    orientadorNome: document.getElementById('val-orientador').value,
+                    orientadorFuncao: document.getElementById('val-funcao').value,
+                    observacoes: document.getElementById('val-obs').value,
+                    notaEmpresa: parseFloat(document.getElementById('val-nota-empresa').value) || null,
+                    notaEscola: parseFloat(document.getElementById('val-nota-escola').value) || null
+                };
+
+                // Tratar datas se necessário (o input val-periodo é livre no PDF original)
+                
+                await App.request(`/turmas/${turmaId}/estagiarios/${estagiarioId}`, {
+                    method: 'PATCH',
+                    body: JSON.stringify(updatedData)
+                });
+
+                App.showNotification('Relatório salvo com sucesso!');
+            } catch (err) {
+                console.error(err);
+                App.showNotification('Erro ao salvar relatório', 'error');
+            }
+        }
+
+        // Init
+        loadReportData();
+    </script>
+</body>
+</html>

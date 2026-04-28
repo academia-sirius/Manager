@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ===== HOME LAYOUT ===== */
+        .home-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header do Centro */
+        .home-header {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .home-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 48px;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid var(--border);
+        }
+
+        .header-logo-placeholder {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), #818cf8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .header-info h1 {
+            font-size: 1.4rem;
+            margin-bottom: 2px;
+        }
+
+        .header-info .header-slogan {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        /* Profile Button - Modernized */
+        .profile-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 6px 16px 6px 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .profile-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-toggle .profile-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #818cf8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: white;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+        }
+
+        .profile-toggle i {
+            font-size: 0.7rem;
+            opacity: 0.5;
+            transition: var(--transition);
+        }
+
+        .profile-toggle:hover i {
+            opacity: 1;
+            transform: translateX(2px);
+        }
+
+        .header-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            object-fit: contain;
+            background: transparent;
+            mix-blend-mode: multiply; /* Remove fundo branco de imagens */
+        }
+
+        /* Profile Sidebar */
+        .profile-overlay {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 400px;
+            height: 100vh;
+            background: var(--surface-solid);
+            border-left: 1px solid var(--border);
+            z-index: 200;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .profile-overlay.open {
+            right: 0;
+        }
+
+        .profile-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 190;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .profile-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .profile-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .profile-panel-header h3 {
+            font-size: 1.3rem;
+        }
+
+        .profile-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .profile-logo-section {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .profile-logo-section img {
+            width: 90px;
+            height: 90px;
+            border-radius: 16px;
+            object-fit: contain;
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 8px;
+            margin-bottom: 16px;
+        }
+
+        .profile-logo-section .logo-fallback {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .profile-logo-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+
+        .profile-logo-section .profile-slogan {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .profile-details-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .profile-detail-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .profile-detail-item i {
+            color: var(--primary);
+            width: 20px;
+            text-align: center;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        .profile-detail-item .detail-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .profile-detail-item .detail-value {
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        .profile-panel-footer {
+            padding: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Home Content */
+        .home-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 40px 48px;
+        }
+
+        .home-content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .home-content-header h2 {
+            font-size: 2rem;
+        }
+
+        /* FAB inside content */
+        .btn-add-turma {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--primary), #818cf8);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .btn-add-turma:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--primary-glow);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .home-header-content {
+                padding: 0 24px;
+            }
+
+            .home-content {
+                padding: 24px;
+            }
+
+            .header-info h1 {
+                font-size: 1.1rem;
+            }
+
+            .header-info .header-slogan {
+                display: none;
+            }
+
+            .profile-toggle span {
+                display: none;
+            }
+
+            .profile-overlay {
+                width: 100%;
+                right: -100%;
+            }
+
+            .home-content-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="notification-container"></div>
+    
+    <div class="background-container">
+        <div class="bg-shape shape-1"></div>
+        <div class="bg-shape shape-2"></div>
+    </div>
+
+    <div class="home-page">
+        <!-- Header -->
+        <header class="home-header">
+            <div class="home-header-content">
+                <div class="header-brand">
+                    <div id="header-logo-container">
+                        <!-- Logo será inserida via JS -->
+                    </div>
+                    <div class="header-info">
+                        <h1 id="header-centro-nome">Manager</h1>
+                        <p class="header-slogan" id="header-centro-slogan"></p>
+                    </div>
+                </div>
+                <button class="profile-toggle" id="btn-open-profile">
+                    <div class="profile-avatar" id="profile-avatar-letter">C</div>
+                    <span>Perfil</span>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="home-content">
+            <div class="home-content-header">
+                <div>
+                    <h2>Minhas Turmas</h2>
+                    <p class="text-muted" id="turmas-count">Nenhuma turma cadastrada</p>
+                </div>
+                <button class="btn-add-turma" id="btn-add-turma" onclick="App.openModal('modal-criar-turma')">
+                    <i class="fa-solid fa-plus"></i> Nova Turma
+                </button>
+            </div>
+
+            <!-- Grid de Turmas (dinâmico via JS) -->
+            <div id="turmas-grid" class="grid-cards">
+                <!-- Cards vão aqui -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="empty-state">
+                <i class="fa-solid fa-folder-open"></i>
+                <h3>Nenhuma turma criada</h3>
+                <p>Clique no botão <strong>"+ Nova Turma"</strong> acima para criar a sua primeira turma.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Profile Sidebar -->
+    <div class="profile-backdrop" id="profile-backdrop"></div>
+    <div class="profile-overlay" id="profile-panel">
+        <div class="profile-panel-header">
+            <h3>Perfil do Centro</h3>
+            <button class="btn-close" id="btn-close-profile"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="profile-panel-body">
+            <div class="profile-logo-section">
+                <div id="profile-logo-display">
+                    <!-- Logo ou fallback via JS -->
+                </div>
+                <h2 id="profile-nome">Centro</h2>
+                <p class="profile-slogan" id="profile-slogan"></p>
+            </div>
+            <div class="profile-details-list">
+                <div class="profile-detail-item">
+                    <i class="fa-solid fa-envelope"></i>
+                    <div>
+                        <div class="detail-label">Email</div>
+                        <div class="detail-value" id="profile-email">—</div>
+                    </div>
+                </div>
+                <div class="profile-detail-item">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <div>
+                        <div class="detail-label">Área de Atuação</div>
+                        <div class="detail-value" id="profile-tipo">—</div>
+                    </div>
+                </div>
+                <div class="profile-detail-item">
+                    <i class="fa-solid fa-align-left"></i>
+                    <div>
+                        <div class="detail-label">Descrição</div>
+                        <div class="detail-value" id="profile-descricao">—</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border);">
+                    <h4 style="font-size: 0.9rem; color: var(--primary); margin-bottom: 16px; text-transform: uppercase;">Personalização</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="input-group">
+                            <label>Cor Primária</label>
+                            <input type="color" id="profile-cor-primaria" style="width: 100%; height: 40px; border-radius: 8px;">
+                        </div>
+                        <div class="input-group">
+                            <label>Cor Secundária</label>
+                            <input type="color" id="profile-cor-secundaria" style="width: 100%; height: 40px; border-radius: 8px;">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary w-100" style="margin-top: 10px; font-size: 0.85rem;" id="btn-save-colors">
+                        <i class="fa-solid fa-palette"></i> Aplicar Cores
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="profile-panel-footer">
+            <button class="btn btn-outline w-100" onclick="App.logout()">
+                <i class="fa-solid fa-right-from-bracket"></i> Sair da Conta
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Criar Turma -->
+    <div class="modal hidden" id="modal-criar-turma">
+        <div class="modal-backdrop" onclick="App.closeModal('modal-criar-turma')"></div>
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3>Criar Nova Turma</h3>
+                <button class="btn-close" onclick="App.closeModal('modal-criar-turma')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-criar-turma">
+                    <div class="input-group">
+                        <label>Nome da Turma</label>
+                        <input type="text" id="turma-nome" required placeholder="Ex: Turma A - Informática 2026">
+                    </div>
+                    <div class="input-group">
+                        <label>Duração (Tempo)</label>
+                        <input type="text" id="turma-duracao" required placeholder="Ex: 6 meses, 1 ano">
+                    </div>
+                    <div class="input-group">
+                        <label>Tipo de Formação</label>
+                        <select id="turma-tipo" required>
+                            <option value="">Selecione...</option>
+                            <option value="Tecnologia">Tecnologia</option>
+                            <option value="Administração">Administração</option>
+                            <option value="Saúde">Saúde</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Professor / Formador Responsável</label>
+                        <input type="text" id="turma-responsavel" required placeholder="Nome do professor">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline" onclick="App.closeModal('modal-criar-turma')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Criar Turma</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        // ===== INIT =====
+        (async () => {
+            // Verifica autenticação via API
+            const centro = await App.checkAuth();
+            if (!centro) return;
+
+            // ===== POPULAR HEADER =====
+            const logoContainer = document.getElementById('header-logo-container');
+            const logoUrl = App.getLogoUrl(centro.logo);
+            if (logoUrl) {
+                logoContainer.innerHTML = `<img src="${logoUrl}" alt="Logo" class="header-logo">`;
+            } else {
+                logoContainer.innerHTML = `<div class="header-logo-placeholder">${centro.nome.charAt(0).toUpperCase()}</div>`;
+            }
+
+            document.getElementById('header-centro-nome').textContent = centro.nome;
+            document.getElementById('header-centro-slogan').textContent = centro.slogan || '';
+            document.getElementById('profile-avatar-letter').textContent = centro.nome.charAt(0).toUpperCase();
+
+            // ===== POPULAR PROFILE PANEL =====
+            const profileLogoDisplay = document.getElementById('profile-logo-display');
+            if (logoUrl) {
+                profileLogoDisplay.innerHTML = `<img src="${logoUrl}" alt="Logo do Centro">`;
+            } else {
+                profileLogoDisplay.innerHTML = `<div class="logo-fallback">${centro.nome.charAt(0).toUpperCase()}</div>`;
+            }
+
+            document.getElementById('profile-nome').textContent = centro.nome;
+            document.getElementById('profile-slogan').textContent = centro.slogan || 'Sem slogan definido';
+            document.getElementById('profile-email').textContent = centro.email;
+
+            // Mapear valor do tipo para texto legível
+            const tipoMap = {
+                'tecnologia': 'Tecnologia da Informação',
+                'engenharia': 'Engenharia',
+                'ciencias': 'Ciências Exatas',
+                'contabilidade': 'Contabilidade',
+                'administracao': 'Administração',
+                'economia': 'Economia',
+                'marketing': 'Marketing',
+                'saude': 'Saúde',
+                'biologia': 'Biologia / Ciências Naturais',
+                'direito': 'Direito',
+                'pedagogia': 'Pedagogia / Educação',
+                'comunicacao': 'Comunicação / Jornalismo',
+                'artes': 'Artes / Design',
+                'outro': 'Outro'
+            };
+            document.getElementById('profile-tipo').textContent = tipoMap[centro.tipo] || centro.tipo || '—';
+            document.getElementById('profile-descricao').textContent = centro.descricao || 'Sem descrição';
+
+            // Inicializar seletores de cores
+            document.getElementById('profile-cor-primaria').value = centro.corPrimaria || '#6366f1';
+            document.getElementById('profile-cor-secundaria').value = centro.corSecundaria || '#ec4899';
+
+            // Live Preview das cores
+            document.getElementById('profile-cor-primaria').addEventListener('input', (e) => {
+                App.applyBranding({ ...centro, corPrimaria: e.target.value });
+            });
+            document.getElementById('profile-cor-secundaria').addEventListener('input', (e) => {
+                App.applyBranding({ ...centro, corSecundaria: e.target.value });
+            });
+
+            // Salvar Cores
+            document.getElementById('btn-save-colors').addEventListener('click', async () => {
+                const corPrimaria = document.getElementById('profile-cor-primaria').value;
+                const corSecundaria = document.getElementById('profile-cor-secundaria').value;
+
+                try {
+                    const updated = await App.request('/centro/profile', {
+                        method: 'PATCH',
+                        body: JSON.stringify({ corPrimaria, corSecundaria })
+                    });
+                    
+                    App.applyBranding(updated);
+                    App.showNotification('Identidade visual atualizada!');
+                } catch (err) {
+                    App.showNotification('Erro ao salvar cores', 'error');
+                }
+            });
+
+            // ===== PROFILE PANEL TOGGLE =====
+            const profilePanel = document.getElementById('profile-panel');
+            const profileBackdrop = document.getElementById('profile-backdrop');
+
+            document.getElementById('btn-open-profile').addEventListener('click', () => {
+                profilePanel.classList.add('open');
+                profileBackdrop.classList.add('open');
+            });
+
+            const closeProfile = () => {
+                profilePanel.classList.remove('open');
+                profileBackdrop.classList.remove('open');
+            };
+
+            document.getElementById('btn-close-profile').addEventListener('click', closeProfile);
+            profileBackdrop.addEventListener('click', closeProfile);
+
+            // ===== TURMAS (API) =====
+            async function renderTurmas() {
+                try {
+                    const turmas = await App.request('/turmas');
+                    const grid = document.getElementById('turmas-grid');
+                    const emptyState = document.getElementById('empty-state');
+                    const countEl = document.getElementById('turmas-count');
+
+                    if (!turmas || turmas.length === 0) {
+                        grid.innerHTML = '';
+                        emptyState.style.display = 'block';
+                        countEl.textContent = 'Nenhuma turma cadastrada';
+                        return;
+                    }
+
+                    emptyState.style.display = 'none';
+                    countEl.textContent = `${turmas.length} turma(s) cadastrada(s)`;
+
+                    grid.innerHTML = turmas.map(t => `
+                        <div class="turma-card" onclick="window.location.href='turma.html?id=${t.id}'">
+                            <div class="turma-header">
+                                <span class="turma-title">${t.nome}</span>
+                                <span class="badge">${t._count?.estagiarios || 0} estagiários</span>
+                            </div>
+                            <p class="turma-info"><strong>Tipo:</strong> ${t.tipoFormacao}</p>
+                            <p class="turma-info"><strong>Resp:</strong> ${t.responsavel}</p>
+                            <div class="turma-stats">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>${t.duracao}</span>
+                            </div>
+                        </div>
+                    `).join('');
+                } catch (err) {
+                    console.error('Erro ao buscar turmas:', err);
+                    App.showNotification('Erro ao carregar turmas', 'error');
+                }
+            }
+
+            // Criar turma
+            document.getElementById('form-criar-turma').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const nome = document.getElementById('turma-nome').value;
+                const duracao = document.getElementById('turma-duracao').value;
+                const tipoFormacao = document.getElementById('turma-tipo').value;
+                const responsavel = document.getElementById('turma-responsavel').value;
+
+                try {
+                    await App.request('/turmas', {
+                        method: 'POST',
+                        body: JSON.stringify({ nome, duracao, tipoFormacao, responsavel })
+                    });
+
+                    App.closeModal('modal-criar-turma');
+                    App.showNotification(`Turma "${nome}" criada com sucesso!`);
+                    renderTurmas();
+                } catch (err) {
+                    console.error('Erro ao criar turma:', err);
+                    App.showNotification('Erro ao criar turma', 'error');
+                }
+            });
+
+            // Renderizar ao carregar
+            renderTurmas();
+        })();
+    </script>
+</body>
+</html>

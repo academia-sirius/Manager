@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Centro {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  senha     String
+  nome      String
+  tipo      String
+  logo      String?
+  slogan    String?
+  descricao String?
+  corPrimaria String? @default("#6366f1")
+  corSecundaria String? @default("#ec4899")
+  createdAt DateTime @default(now())
+  turmas    Turma[]
+}
+
+model Turma {
+  id            Int           @id @default(autoincrement())
+  nome          String
+  duracao       String
+  tipoFormacao  String
+  responsavel   String
+  centroId      Int
+  centro        Centro        @relation(fields: [centroId], references: [id])
+  estagiarios   Estagiario[]
+  createdAt     DateTime      @default(now())
+}
+
+model Estagiario {
+  id              Int      @id @default(autoincrement())
+  nome            String
+  email           String?
+  telefone        String?
+  
+  // Identificação e Contexto
+  classe          String?   // Ex: 13ª Classe, Turma A
+  dataInicio      String?
+  dataFim         String?
+  totalHoras      String?
+  
+  // Entidade de Acolhimento
+  empresaNome     String?
+  empresaMorada   String?
+  empresaTelefone String?
+  empresaEmail    String?
+  orientadorNome   String?
+  orientadorFuncao String?
+  
+  // Matriz de Avaliação (15 Parâmetros)
+  // Valores: Excelente, Bom, Satisfaz, Insatisfaz
+  crit1_assiduidade      String? @default("Bom")
+  crit2_pontualidade      String? @default("Bom")
+  crit3_disciplina       String? @default("Bom")
+  crit4_empenho          String? @default("Bom")
+  crit5_maturidade       String? @default("Bom")
+  crit6_criatividade     String? @default("Bom")
+  crit7_comunicacao      String? @default("Bom")
+  crit8_trabalho_equipa  String? @default("Bom")
+  crit9_apresentacao     String? @default("Bom")
+  crit10_conhecimentos   String? @default("Bom")
+  crit11_autoconfianca   String? @default("Bom")
+  crit12_relacao_sup     String? @default("Bom")
+  crit13_relacao_col     String? @default("Bom")
+  crit14_iniciativa      String? @default("Bom")
+  crit15_relatorio       String? @default("Bom")
+  
+  // Observações e Validação
+  observacoes     String?
+  notaEmpresa     Float?
+  notaEscola      Float?
+  
+  turmaId         Int
+  turma           Turma    @relation(fields: [turmaId], references: [id])
+  createdAt       DateTime @default(now())
+}

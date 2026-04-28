@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager - Relatórios de Estágio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="notification-container"></div>
+
+    <!-- Animated Background -->
+    <div class="background-container">
+        <div class="bg-shape shape-1"></div>
+        <div class="bg-shape shape-2"></div>
+    </div>
+    
+    <div class="landing-page">
+        <!-- Header -->
+        <header class="landing-header">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <span class="logo-text">Manager</span>
+                </div>
+                <a href="login.html" class="btn btn-primary" style="text-decoration: none;">Entrar <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <main class="landing-main">
+            <div class="hero-wrapper">
+                <section class="hero-section">
+                    <h1 class="gradient-text hero-title">Manager</h1>
+                    <p class="subtitle hero-slogan">Sistema Inteligente de Gestão de Estágios</p>
+                </section>
+                
+                <section class="why-use-section glass-card">
+                    <h3><i class="fa-solid fa-lightbulb"></i> Por que usar o Manager?</h3>
+                    <div class="why-benefits">
+                        <div class="benefit">
+                            <div class="benefit-icon"><i class="fa-solid fa-clock"></i></div>
+                            <div class="benefit-text">
+                                <strong>Economia de Tempo</strong>
+                                <p>Automatize cálculos de notas e centralize os relatórios.</p>
+                            </div>
+                        </div>
+                        <div class="benefit">
+                            <div class="benefit-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div class="benefit-text">
+                                <strong>Gestão Segura</strong>
+                                <p>Todos os dados de alunos e turmas em um ambiente protegido.</p>
+                            </div>
+                        </div>
+                        <div class="benefit">
+                            <div class="benefit-icon"><i class="fa-solid fa-chart-line"></i></div>
+                            <div class="benefit-text">
+                                <strong>Avaliações Precisas</strong>
+                                <p>Critérios claros para análises objetivas do estágio.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+        
+        <footer class="landing-footer">
+            <div class="footer-cards-container">
+                <h2 class="section-title">O que você pode fazer</h2>
+                <div class="grid-cards custom-grid">
+                    <div class="glass-card feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-users fa-2x"></i>
+                        </div>
+                        <h3>Criar Turmas</h3>
+                        <p>Organize os alunos separando-os por turmas e disciplinas de forma estruturada e eficiente.</p>
+                    </div>
+                    <div class="glass-card feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-user-plus fa-2x"></i>
+                        </div>
+                        <h3>Cadastrar Alunos</h3>
+                        <p>Adicione alunos facilmente em suas respectivas turmas para acompanhamento preciso.</p>
+                    </div>
+                    <div class="glass-card feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-clipboard-check fa-2x"></i>
+                        </div>
+                        <h3>Avaliar Relatórios</h3>
+                        <p>Defina critérios personalizados e atribua notas com um sistema intuitivo e focado em detalhes.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">Criado pela <span class="highlight">Academia Sirius</span><br>&copy; Direitos guardados pela academia Sirius</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        // Redireciona se já estiver logado
+        App.redirectIfAuthenticated();
+    </script>
+</body>
+</html>
