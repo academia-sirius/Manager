@@ -57,30 +57,42 @@ model Estagiario {
   orientadorNome   String?
   orientadorFuncao String?
   
-  // Matriz de Avaliação (15 Parâmetros)
-  // Valores: Excelente, Bom, Satisfaz, Insatisfaz
-  crit1_assiduidade      String? @default("Bom")
-  crit2_pontualidade      String? @default("Bom")
-  crit3_disciplina       String? @default("Bom")
-  crit4_empenho          String? @default("Bom")
-  crit5_maturidade       String? @default("Bom")
-  crit6_criatividade     String? @default("Bom")
-  crit7_comunicacao      String? @default("Bom")
-  crit8_trabalho_equipa  String? @default("Bom")
-  crit9_apresentacao     String? @default("Bom")
-  crit10_conhecimentos   String? @default("Bom")
-  crit11_autoconfianca   String? @default("Bom")
-  crit12_relacao_sup     String? @default("Bom")
-  crit13_relacao_col     String? @default("Bom")
-  crit14_iniciativa      String? @default("Bom")
-  crit15_relatorio       String? @default("Bom")
+  // Matriz de Avaliação (15 Parâmetros) - Agora Numéricos (0 a 20)
+  crit1_assiduidade      Float? @default(10)
+  crit2_pontualidade     Float? @default(10)
+  crit3_disciplina       Float? @default(10)
+  crit4_empenho          Float? @default(10)
+  crit5_maturidade       Float? @default(10)
+  crit6_criatividade     Float? @default(10)
+  crit7_comunicacao      Float? @default(10)
+  crit8_trabalho_equipa  Float? @default(10)
+  crit9_apresentacao     Float? @default(10)
+  crit10_conhecimentos   Float? @default(10)
+  crit11_autoconfianca   Float? @default(10)
+  crit12_relacao_sup     Float? @default(10)
+  crit13_relacao_col     Float? @default(10)
+  crit14_iniciativa      Float? @default(10)
+  crit15_relatorio       Float? @default(10)
   
   // Observações e Validação
   observacoes     String?
   notaEmpresa     Float?
   notaEscola      Float?
   
+  registrosDiarios RegistroDiario[]
+  
   turmaId         Int
   turma           Turma    @relation(fields: [turmaId], references: [id])
   createdAt       DateTime @default(now())
+}
+
+model RegistroDiario {
+  id                      Int      @id @default(autoincrement())
+  data                    DateTime @default(now())
+  presenca                Boolean  @default(true)
+  atraso_minutos          Int      @default(0)
+  observacao_comportamental String?
+  
+  estagiarioId            Int
+  estagiario              Estagiario @relation(fields: [estagiarioId], references: [id])
 }

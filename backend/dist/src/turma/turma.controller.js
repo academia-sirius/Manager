@@ -14,12 +14,16 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TurmaController = void 0;
 const common_1 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
 const turma_service_js_1 = require("./turma.service.js");
 const jwt_auth_guard_js_1 = require("../auth/guards/jwt-auth.guard.js");
+const file_parser_service_js_1 = require("./file-parser.service.js");
 let TurmaController = class TurmaController {
     turmaService;
-    constructor(turmaService) {
+    fileParser;
+    constructor(turmaService, fileParser) {
         this.turmaService = turmaService;
+        this.fileParser = fileParser;
     }
     async findAll(req) {
         return this.turmaService.findAll(req.user.id);
@@ -35,6 +39,21 @@ let TurmaController = class TurmaController {
     }
     async addEstagiario(id, req, data) {
         return this.turmaService.addEstagiario(id, req.user.id, data);
+    }
+    async importEstagiarios(id, req, data, file) {
+        let list = [];
+        if (file) {
+            list = await this.fileParser.parseFile(file);
+        }
+        else {
+            list = typeof data.estagiarios === 'string'
+                ? JSON.parse(data.estagiarios)
+                : data.estagiarios;
+        }
+        return this.turmaService.importEstagiarios(id, req.user.id, list);
+    }
+    async addRegistro(_id, estagiarioId, req, data) {
+        return this.turmaService.addRegistroDiario(estagiarioId, req.user.id, data);
     }
     async findEstagiario(id, estagiarioId, req) {
         return this.turmaService.findEstagiario(id, estagiarioId, req.user.id);
@@ -88,6 +107,27 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TurmaController.prototype, "addEstagiario", null);
 __decorate([
+    (0, common_1.Post)(':id/estagiarios/import'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Request)()),
+    __param(2, (0, common_1.Body)()),
+    __param(3, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object, Object, Object]),
+    __metadata("design:returntype", Promise)
+], TurmaController.prototype, "importEstagiarios", null);
+__decorate([
+    (0, common_1.Post)(':id/estagiarios/:estagiarioId/registros'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Param)('estagiarioId', common_1.ParseIntPipe)),
+    __param(2, (0, common_1.Request)()),
+    __param(3, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Number, Object, Object]),
+    __metadata("design:returntype", Promise)
+], TurmaController.prototype, "addRegistro", null);
+__decorate([
     (0, common_1.Get)(':id/estagiarios/:estagiarioId'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Param)('estagiarioId', common_1.ParseIntPipe)),
@@ -118,6 +158,7 @@ __decorate([
 exports.TurmaController = TurmaController = __decorate([
     (0, common_1.Controller)('turmas'),
     (0, common_1.UseGuards)(jwt_auth_guard_js_1.JwtAuthGuard),
-    __metadata("design:paramtypes", [turma_service_js_1.TurmaService])
+    __metadata("design:paramtypes", [turma_service_js_1.TurmaService,
+        file_parser_service_js_1.FileParserService])
 ], TurmaController);
 //# sourceMappingURL=turma.controller.js.map

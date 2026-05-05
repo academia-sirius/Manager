@@ -10,14 +10,15 @@ exports.TurmaModule = void 0;
 const common_1 = require("@nestjs/common");
 const turma_service_js_1 = require("./turma.service.js");
 const turma_controller_js_1 = require("./turma.controller.js");
+const file_parser_service_js_1 = require("./file-parser.service.js");
 let TurmaModule = class TurmaModule {
 };
 exports.TurmaModule = TurmaModule;
 exports.TurmaModule = TurmaModule = __decorate([
     (0, common_1.Module)({
         controllers: [turma_controller_js_1.TurmaController],
-        providers: [turma_service_js_1.TurmaService],
-        exports: [turma_service_js_1.TurmaService],
+        providers: [turma_service_js_1.TurmaService, file_parser_service_js_1.FileParserService],
+        exports: [turma_service_js_1.TurmaService, file_parser_service_js_1.FileParserService],
     })
 ], TurmaModule);
 //# sourceMappingURL=turma.module.js.map

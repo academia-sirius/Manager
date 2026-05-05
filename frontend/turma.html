@@ -150,9 +150,14 @@
                 <h1 id="turma-nome-display">Carregando...</h1>
                 <p class="text-muted">Detalhes e Gestão de Estagiários</p>
             </div>
-            <button class="btn btn-primary" onclick="App.openModal('modal-add-estagiario')">
-                <i class="fa-solid fa-plus"></i> Adicionar Estagiário
-            </button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-outline" onclick="App.openModal('modal-import-estagiarios')">
+                    <i class="fa-solid fa-file-import"></i> Importar Lista
+                </button>
+                <button class="btn btn-primary" onclick="App.openModal('modal-add-estagiario')">
+                    <i class="fa-solid fa-plus"></i> Adicionar Estagiário
+                </button>
+            </div>
         </div>
 
         <div class="turma-details-grid">
@@ -193,6 +198,33 @@
             <div id="students-list">
                 <!-- Estagiários serão listados aqui -->
                 <div class="empty-students">Carregando estagiários...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Importar Estagiários -->
+    <div class="modal hidden" id="modal-import-estagiarios">
+        <div class="modal-backdrop" onclick="App.closeModal('modal-import-estagiarios')"></div>
+        <div class="modal-content glass-card" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3>Importar Lista Massiva</h3>
+                <button class="btn-close" onclick="App.closeModal('modal-import-estagiarios')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted" style="margin-bottom: 20px;">Cole abaixo o JSON com a lista de estagiários.</p>
+                <div class="input-group">
+                    <label>Dados em JSON (Ex: [{"nome": "Joao", "email": "joao@ex" }])</label>
+                    <textarea id="import-json-data" style="width:100%; height:120px; font-family: monospace; font-size: 0.8rem; background: rgba(0,0,0,0.3); color: #fff; padding: 10px; border-radius: 8px; border: 1px solid var(--border);"></textarea>
+                </div>
+                <div class="input-group" style="margin-top: 15px;">
+                    <label>Ou faça Upload de Arquivo (Excel, CSV, PDF, DOCX)</label>
+                    <input type="file" id="import-file" accept=".xlsx,.xls,.csv,.pdf,.docx" style="background: rgba(0,0,0,0.3); padding: 10px; width: 100%; border-radius: 8px; color: #fff;">
+                    <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 5px;">* Arquivos PDF/DOCX tentaremos extrair nomes e contatos automaticamente.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="App.closeModal('modal-import-estagiarios')">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="handleImport()">Processar Importação</button>
+                </div>
             </div>
         </div>
     </div>
@@ -294,21 +326,15 @@
             }
 
             list.innerHTML = students.map(s => {
-                // Cálculo simples de desempenho para exibição na lista
-                const criteria = [
-                    s.crit1_assiduidade, s.crit2_pontualidade, s.crit3_disciplina, s.crit4_empenho, s.crit5_maturidade,
-                    s.crit6_criatividade, s.crit7_comunicacao, s.crit8_trabalho_equipa, s.crit9_apresentacao, s.crit10_conhecimentos,
-                    s.crit11_autoconfianca, s.crit12_relacao_sup, s.crit13_relacao_col, s.crit14_iniciativa, s.crit15_relatorio
-                ];
-                
-                const excelentes = criteria.filter(c => c === 'Excelente').length;
-                const bons = criteria.filter(c => c === 'Bom').length;
-                const insatisfaz = criteria.filter(c => c === 'Insatisfaz').length;
-                
-                let desempenho = 'Equilibrado';
-                if (excelentes > 10) desempenho = 'Eficaz / Excelente';
-                else if (bons > 10) desempenho = 'Bom';
-                else if (insatisfaz > 5) desempenho = 'Mau / Insatisfatório';
+                // Cálculo simples de desempenho baseado na nota escola ou média fictícia se novo
+                const nota = s.notaEscola || 10;
+                let desempenho = 'Regular';
+                let badgeClass = '';
+
+                if (nota >= 18) { desempenho = 'Excelente'; badgeClass = 'badge-success'; }
+                else if (nota >= 14) { desempenho = 'Bom'; badgeClass = 'badge-primary'; }
+                else if (nota >= 10) { desempenho = 'Satisfatório'; badgeClass = 'badge-warning'; }
+                else { desempenho = 'Insatisfatório'; badgeClass = 'badge-danger'; }
 
                 return `
                     <div class="student-item">
@@ -319,7 +345,7 @@
                                     <strong class="hover-primary">${s.nome}</strong>
                                 </a>
                                 <div class="text-muted" style="font-size: 0.85rem;">
-                                    ${s.email || 'Sem email'} | Desempenho: <span class="badge">${desempenho}</span>
+                                    ${s.email || 'Sem email'} | Desempenho: <span class="badge ${badgeClass}">${desempenho}</span>
                                 </div>
                             </div>
                         </div>
@@ -338,6 +364,40 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        async function handleImport() {
+            const jsonText = document.getElementById('import-json-data').value;
+            const fileInput = document.getElementById('import-file');
+            const file = fileInput.files[0];
+
+            if (!jsonText && !file) {
+                App.showNotification('Cole o JSON ou selecione um arquivo.', 'error');
+                return;
+            }
+
+            try {
+                let body;
+
+                if (file) {
+                    body = new FormData();
+                    body.append('file', file);
+                } else {
+                    const estagiarios = JSON.parse(jsonText);
+                    body = JSON.stringify({ estagiarios });
+                }
+
+                await App.request(`/turmas/${turmaId}/estagiarios/import`, {
+                    method: 'POST',
+                    body: body
+                });
+
+                App.closeModal('modal-import-estagiarios');
+                App.showNotification('Importação concluída com sucesso!');
+                loadTurma();
+            } catch (err) {
+                App.showNotification('Erro na importação', 'error');
+            }
         }
 
         document.getElementById('form-add-estagiario').addEventListener('submit', async (e) => {

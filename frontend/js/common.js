@@ -2,7 +2,7 @@
 
 const App = {
     // Detectar automaticamente se está em dev ou prod
-    API_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    API_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
         ? 'http://localhost:4000/api'
         : 'https://seu-app-no-render.onrender.com/api', // Substitua pela sua URL do Render
 

@@ -1110,3 +1110,8 @@ h1, h2, h3, h4 { font-weight: 700; color: var(--text); }
     }
 }
 
+/* Badge Variants */
+.badge-success { background: rgba(16, 185, 129, 0.2) !important; color: #10b981 !important; }
+.badge-primary { background: rgba(99, 102, 241, 0.2) !important; color: #6366f1 !important; }
+.badge-warning { background: rgba(245, 158, 11, 0.2) !important; color: #f59e0b !important; }
+.badge-danger { background: rgba(239, 68, 68, 0.2) !important; color: #ef4444 !important; }
