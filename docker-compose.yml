@@ -1,0 +1,65 @@
+services:
+
+  # ─────────────────────────────────────────────────────────────
+  # BACKEND  ·  NestJS + Prisma + SQLite
+  # ─────────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: manager_backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      # A base de dados SQLite fica num volume persistente
+      DATABASE_URL: "file:/app/data/production.db"
+      JWT_SECRET: ${JWT_SECRET:-manager-super-secret-jwt-key-CHANGE-ME}
+    volumes:
+      # Volume persistente para a SQLite e para os uploads
+      - sqlite_data:/app/data
+      - uploads_data:/app/uploads
+    expose:
+      - "4000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4000/api"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    networks:
+      - manager_net
+
+  # ─────────────────────────────────────────────────────────────
+  # FRONTEND  ·  HTML/CSS/JS estático via Nginx
+  # (actua também como proxy reverso para o backend)
+  # ─────────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: manager_frontend
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-80}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - manager_net
+
+# ─────────────────────────────────────────────────────────────
+# VOLUMES  ·  dados persistentes
+# ─────────────────────────────────────────────────────────────
+volumes:
+  sqlite_data:
+    driver: local
+  uploads_data:
+    driver: local
+
+# ─────────────────────────────────────────────────────────────
+# REDE interna
+# ─────────────────────────────────────────────────────────────
+networks:
+  manager_net:
+    driver: bridge

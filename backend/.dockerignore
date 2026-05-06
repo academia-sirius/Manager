@@ -1,0 +1,12 @@
+node_modules
+dist
+.env
+*.db
+*.db-journal
+uploads
+generated
+coverage
+.git
+.gitignore
+README.md
+test-prisma.ts

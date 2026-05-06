@@ -1,10 +1,11 @@
 // common.js - Utilidades compartilhadas e verificação de sessão
 
 const App = {
-    // Detectar automaticamente se está em dev ou prod
-    API_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
+    // Em desenvolvimento aponta directamente para o backend.
+    // Em produção (Docker + Nginx) usa URL relativa — o Nginx faz o proxy de /api/.
+    API_URL: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '')
         ? 'http://localhost:4000/api'
-        : 'https://seu-app-no-render.onrender.com/api', // Substitua pela sua URL do Render
+        : '/api',
 
     // Helper para fazer requests à API com token JWT
     request: async (endpoint, options = {}) => {
