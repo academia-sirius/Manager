@@ -10,4 +10,4 @@ npx prisma db push --accept-data-loss
 echo "✅  Base de dados pronta."
 echo "🚀  A iniciar o servidor NestJS..."
 
-exec node dist/main
+exec node dist/src/main
