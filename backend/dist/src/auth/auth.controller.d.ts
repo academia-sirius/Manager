@@ -16,13 +16,13 @@ export declare class AuthController {
             nome: string;
             nif: string;
             tipo: string;
-            logo: string | null;
             slogan: string | null;
             descricao: string | null;
             localizacao: string | null;
             telefone: string | null;
-            createdAt: Date;
             id: number;
+            logo: string | null;
+            createdAt: Date;
         };
     }>;
     getProfile(req: any): Promise<{
@@ -30,13 +30,13 @@ export declare class AuthController {
         nome: string;
         nif: string;
         tipo: string;
-        logo: string | null;
         slogan: string | null;
         descricao: string | null;
         localizacao: string | null;
         telefone: string | null;
-        createdAt: Date;
         id: number;
+        logo: string | null;
+        createdAt: Date;
     }>;
     logout(): Promise<{
         message: string;

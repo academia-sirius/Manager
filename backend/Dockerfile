@@ -38,7 +38,7 @@ RUN mkdir -p /app/data /app/uploads/logos
 
 # Script de entrypoint: aplica migrações e arranca o servidor
 COPY entrypoint.sh ./entrypoint.sh
-RUN chmod +x ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh && sed -i 's/\r$//' ./entrypoint.sh
 
 EXPOSE 4000
 
