@@ -40,8 +40,8 @@ services:
       dockerfile: Dockerfile
     container_name: manager_frontend
     restart: unless-stopped
-    ports:
-      - "${APP_PORT:-80}:80"
+    expose:
+      - "80"
     depends_on:
       backend:
         condition: service_healthy
