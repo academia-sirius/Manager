@@ -1,0 +1,3 @@
+# Forçar LF em scripts shell (necessário para Docker/Linux)
+*.sh text eol=lf
+entrypoint.sh text eol=lf
