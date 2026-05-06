@@ -15,11 +15,12 @@ class SignupDto {
     email;
     senha;
     nome;
+    nif;
     tipo;
     slogan;
     descricao;
-    corPrimaria;
-    corSecundaria;
+    localizacao;
+    telefone;
 }
 exports.SignupDto = SignupDto;
 __decorate([
@@ -42,6 +43,11 @@ __decorate([
     __metadata("design:type", String)
 ], SignupDto.prototype, "nome", void 0);
 __decorate([
+    (0, class_validator_1.IsNotEmpty)({ message: 'NIF é obrigatório' }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], SignupDto.prototype, "nif", void 0);
+__decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'Tipo/Área de atuação é obrigatório' }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
@@ -60,10 +66,10 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], SignupDto.prototype, "corPrimaria", void 0);
+], SignupDto.prototype, "localizacao", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], SignupDto.prototype, "corSecundaria", void 0);
+], SignupDto.prototype, "telefone", void 0);
 //# sourceMappingURL=signup.dto.js.map

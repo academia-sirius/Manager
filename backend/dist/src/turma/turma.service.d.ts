@@ -16,13 +16,16 @@ export declare class TurmaService {
         centroId: number;
     })[]>;
     findOne(id: number, centroId: number): Promise<{
+        _count: {
+            estagiarios: number;
+        };
         estagiarios: {
             email: string | null;
             nome: string;
+            telefone: string | null;
             id: number;
             createdAt: Date;
             turmaId: number;
-            telefone: string | null;
             classe: string | null;
             dataInicio: string | null;
             dataFim: string | null;
@@ -52,9 +55,6 @@ export declare class TurmaService {
             notaEmpresa: number | null;
             notaEscola: number | null;
         }[];
-        _count: {
-            estagiarios: number;
-        };
     } & {
         nome: string;
         id: number;
@@ -87,6 +87,20 @@ export declare class TurmaService {
         responsavel: string;
         centroId: number;
     }>;
+    update(id: number, centroId: number, data: {
+        nome?: string;
+        duracao?: string;
+        tipoFormacao?: string;
+        responsavel?: string;
+    }): Promise<{
+        nome: string;
+        id: number;
+        createdAt: Date;
+        duracao: string;
+        tipoFormacao: string;
+        responsavel: string;
+        centroId: number;
+    }>;
     addEstagiario(turmaId: number, centroId: number, data: {
         nome: string;
         email?: string;
@@ -94,10 +108,10 @@ export declare class TurmaService {
     }): Promise<{
         email: string | null;
         nome: string;
+        telefone: string | null;
         id: number;
         createdAt: Date;
         turmaId: number;
-        telefone: string | null;
         classe: string | null;
         dataInicio: string | null;
         dataFim: string | null;
@@ -136,11 +150,12 @@ export declare class TurmaService {
                 email: string;
                 senha: string;
                 nome: string;
+                nif: string;
                 tipo: string;
                 slogan: string | null;
                 descricao: string | null;
-                corPrimaria: string | null;
-                corSecundaria: string | null;
+                localizacao: string | null;
+                telefone: string | null;
                 id: number;
                 logo: string | null;
                 createdAt: Date;
@@ -164,10 +179,10 @@ export declare class TurmaService {
         }[];
         email: string | null;
         nome: string;
+        telefone: string | null;
         id: number;
         createdAt: Date;
         turmaId: number;
-        telefone: string | null;
         classe: string | null;
         dataInicio: string | null;
         dataFim: string | null;
@@ -211,10 +226,10 @@ export declare class TurmaService {
     updateEstagiario(turmaId: number, estagiarioId: number, centroId: number, data: any): Promise<{
         email: string | null;
         nome: string;
+        telefone: string | null;
         id: number;
         createdAt: Date;
         turmaId: number;
-        telefone: string | null;
         classe: string | null;
         dataInicio: string | null;
         dataFim: string | null;
@@ -247,10 +262,10 @@ export declare class TurmaService {
     removeEstagiario(turmaId: number, estagiarioId: number, centroId: number): Promise<{
         email: string | null;
         nome: string;
+        telefone: string | null;
         id: number;
         createdAt: Date;
         turmaId: number;
-        telefone: string | null;
         classe: string | null;
         dataInicio: string | null;
         dataFim: string | null;

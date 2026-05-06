@@ -5,30 +5,33 @@ export declare class CentroService {
     getProfile(centroId: number): Promise<{
         email: string;
         nome: string;
+        nif: string;
         tipo: string;
         slogan: string | null;
         descricao: string | null;
-        corPrimaria: string | null;
-        corSecundaria: string | null;
+        localizacao: string | null;
+        telefone: string | null;
         id: number;
         logo: string | null;
         createdAt: Date;
     }>;
     updateProfile(centroId: number, data: Partial<{
         nome: string;
+        nif: string;
         tipo: string;
         slogan: string;
         descricao: string;
-        corPrimaria: string;
-        corSecundaria: string;
+        localizacao: string;
+        telefone: string;
     }>): Promise<{
         email: string;
         nome: string;
+        nif: string;
         tipo: string;
         slogan: string | null;
         descricao: string | null;
-        corPrimaria: string | null;
-        corSecundaria: string | null;
+        localizacao: string | null;
+        telefone: string | null;
         id: number;
         logo: string | null;
         createdAt: Date;

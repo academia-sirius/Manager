@@ -54,6 +54,14 @@ let TurmaService = class TurmaService {
         await this.prisma.estagiario.deleteMany({ where: { turmaId: id } });
         return this.prisma.turma.delete({ where: { id } });
     }
+    async update(id, centroId, data) {
+        const turma = await this.prisma.turma.findUnique({ where: { id } });
+        if (!turma)
+            throw new common_1.NotFoundException('Turma não encontrada');
+        if (turma.centroId !== centroId)
+            throw new common_1.ForbiddenException('Acesso negado');
+        return this.prisma.turma.update({ where: { id }, data });
+    }
     async addEstagiario(turmaId, centroId, data) {
         const turma = await this.prisma.turma.findUnique({ where: { id: turmaId } });
         if (!turma)

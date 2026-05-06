@@ -1,342 +1,546 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Turma - Manager</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
     <style>
-        .turma-page {
-            min-height: 100vh;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 48px;
-        }
+      .turma-page {
+        min-height: 100vh;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 48px;
+      }
 
-        .turma-header-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 40px;
-        }
+      .turma-header-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 40px;
+      }
 
-        .turma-details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
+      .turma-details-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 40px;
+      }
 
-        .detail-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+      .detail-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
 
-        .detail-card i {
-            font-size: 1.5rem;
-            color: var(--primary);
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--primary-glow);
-            border-radius: 10px;
-        }
+      .detail-card i {
+        font-size: 1.5rem;
+        color: var(--primary);
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--primary-glow);
+        border-radius: 10px;
+      }
 
-        .detail-card-info h4 {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
+      .detail-card-info h4 {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+      }
 
-        .detail-card-info p {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
+      .detail-card-info p {
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
 
-        .students-section {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 32px;
-        }
+      .students-section {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 32px;
+      }
 
-        .students-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
+      .students-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
 
-        .student-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px;
-            border-bottom: 1px solid var(--border);
-            transition: var(--transition);
-        }
+      .student-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+        border-bottom: 1px solid var(--border);
+        transition: var(--transition);
+      }
 
-        .student-item:last-child {
-            border-bottom: none;
-        }
+      .student-item:last-child {
+        border-bottom: none;
+      }
 
-        .student-item:hover {
-            background: var(--surface-hover);
-        }
+      .student-item:hover {
+        background: var(--surface-hover);
+      }
 
-        .student-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+      .student-info {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
 
-        .student-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-        }
+      .student-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+      }
 
-        .btn-remove-student {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: var(--transition);
-        }
+      .btn-remove-student {
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: var(--transition);
+      }
 
-        .btn-remove-student:hover {
-            color: var(--danger);
-        }
+      .btn-remove-student:hover {
+        color: var(--danger);
+      }
 
-        .empty-students {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-muted);
-        }
+      .empty-students {
+        text-align: center;
+        padding: 40px;
+        color: var(--text-muted);
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div id="notification-container"></div>
-    
+
     <div class="background-container">
-        <div class="bg-shape shape-1"></div>
-        <div class="bg-shape shape-2"></div>
+      <div class="bg-shape shape-1"></div>
+      <div class="bg-shape shape-2"></div>
     </div>
 
     <div class="turma-page">
-        <button class="btn-text" onclick="window.location.href='home.html'">
-            <i class="fa-solid fa-arrow-left"></i> Voltar para Home
-        </button>
+      <button class="btn-text" onclick="window.location.href = 'home.html'">
+        <i class="fa-solid fa-arrow-left"></i> Voltar para Home
+      </button>
 
-        <div class="turma-header-info">
-            <div>
-                <h1 id="turma-nome-display">Carregando...</h1>
-                <p class="text-muted">Detalhes e Gestão de Estagiários</p>
-            </div>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn btn-outline" onclick="App.openModal('modal-import-estagiarios')">
-                    <i class="fa-solid fa-file-import"></i> Importar Lista
+      <div class="turma-header-info">
+        <div>
+          <h1 id="turma-nome-display">Carregando...</h1>
+          <p class="text-muted">Detalhes e Gestão de Estagiários</p>
+        </div>
+        <div style="display: flex; gap: 10px">
+          <button
+            class="btn btn-outline"
+            onclick="openEditTurmaModal()"
+            title="Editar Turma"
+          >
+            <i class="fa-solid fa-pen"></i> Editar Turma
+          </button>
+          <button
+            class="btn btn-outline"
+            onclick="App.openModal('modal-import-estagiarios')"
+          >
+            <i class="fa-solid fa-file-import"></i> Importar Lista
+          </button>
+          <button
+            class="btn btn-primary"
+            onclick="App.openModal('modal-add-estagiario')"
+          >
+            <i class="fa-solid fa-plus"></i> Adicionar Estagiário
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Editar Turma (Adicionado) -->
+      <div class="modal hidden" id="modal-edit-turma">
+        <div
+          class="modal-backdrop"
+          onclick="App.closeModal('modal-edit-turma')"
+        ></div>
+        <div class="modal-content glass-card">
+          <div class="modal-header">
+            <h3>Editar Turma</h3>
+            <button
+              class="btn-close"
+              onclick="App.closeModal('modal-edit-turma')"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="form-edit-turma">
+              <div class="input-group">
+                <label>Nome da Turma</label>
+                <input type="text" id="edit-turma-nome" required />
+              </div>
+              <div class="input-group">
+                <label>Duração</label>
+                <input type="text" id="edit-turma-duracao" required />
+              </div>
+              <div class="input-group">
+                <label>Tipo de Formação</label>
+                <select id="edit-turma-tipo" required>
+                  <option value="Tecnologia">Tecnologia</option>
+                  <option value="Administração">Administração</option>
+                  <option value="Saúde">Saúde</option>
+                  <option value="Outro">Outro</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label>Professor Responsável</label>
+                <input type="text" id="edit-turma-responsavel" required />
+              </div>
+              <div
+                class="modal-footer"
+                style="display: flex; justify-content: space-between"
+              >
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  onclick="deleteTurma()"
+                >
+                  Excluir Turma
                 </button>
-                <button class="btn btn-primary" onclick="App.openModal('modal-add-estagiario')">
-                    <i class="fa-solid fa-plus"></i> Adicionar Estagiário
-                </button>
-            </div>
+                <div style="display: flex; gap: 10px">
+                  <button
+                    type="button"
+                    class="btn btn-outline"
+                    onclick="App.closeModal('modal-edit-turma')"
+                  >
+                    Cancelar
+                  </button>
+                  <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
+      </div>
 
-        <div class="turma-details-grid">
-            <div class="detail-card">
-                <i class="fa-solid fa-clock"></i>
-                <div class="detail-card-info">
-                    <h4>Duração</h4>
-                    <p id="turma-duracao-display">—</p>
-                </div>
-            </div>
-            <div class="detail-card">
-                <i class="fa-solid fa-graduation-cap"></i>
-                <div class="detail-card-info">
-                    <h4>Tipo de Formação</h4>
-                    <p id="turma-tipo-display">—</p>
-                </div>
-            </div>
-            <div class="detail-card">
-                <i class="fa-solid fa-user-tie"></i>
-                <div class="detail-card-info">
-                    <h4>Responsável</h4>
-                    <p id="turma-responsavel-display">—</p>
-                </div>
-            </div>
-            <div class="detail-card">
-                <i class="fa-solid fa-users"></i>
-                <div class="detail-card-info">
-                    <h4>Estagiários</h4>
-                    <p id="turma-count-display">0</p>
-                </div>
-            </div>
+      <div class="turma-details-grid">
+        <div class="detail-card">
+          <i class="fa-solid fa-clock"></i>
+          <div class="detail-card-info">
+            <h4>Duração</h4>
+            <p id="turma-duracao-display">—</p>
+          </div>
         </div>
+        <div class="detail-card">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <div class="detail-card-info">
+            <h4>Tipo de Formação</h4>
+            <p id="turma-tipo-display">—</p>
+          </div>
+        </div>
+        <div class="detail-card">
+          <i class="fa-solid fa-user-tie"></i>
+          <div class="detail-card-info">
+            <h4>Responsável</h4>
+            <p id="turma-responsavel-display">—</p>
+          </div>
+        </div>
+        <div class="detail-card">
+          <i class="fa-solid fa-users"></i>
+          <div class="detail-card-info">
+            <h4>Estagiários</h4>
+            <p id="turma-count-display">0</p>
+          </div>
+        </div>
+      </div>
 
-        <div class="students-section">
-            <div class="students-header">
-                <h3>Lista de Estagiários</h3>
-            </div>
-            <div id="students-list">
-                <!-- Estagiários serão listados aqui -->
-                <div class="empty-students">Carregando estagiários...</div>
-            </div>
+      <div class="students-section">
+        <div class="students-header">
+          <h3>Lista de Estagiários</h3>
         </div>
+        <div id="students-list">
+          <!-- Estagiários serão listados aqui -->
+          <div class="empty-students">Carregando estagiários...</div>
+        </div>
+      </div>
     </div>
 
     <!-- Modal Importar Estagiários -->
     <div class="modal hidden" id="modal-import-estagiarios">
-        <div class="modal-backdrop" onclick="App.closeModal('modal-import-estagiarios')"></div>
-        <div class="modal-content glass-card" style="max-width: 600px;">
-            <div class="modal-header">
-                <h3>Importar Lista Massiva</h3>
-                <button class="btn-close" onclick="App.closeModal('modal-import-estagiarios')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-                <p class="text-muted" style="margin-bottom: 20px;">Cole abaixo o JSON com a lista de estagiários.</p>
-                <div class="input-group">
-                    <label>Dados em JSON (Ex: [{"nome": "Joao", "email": "joao@ex" }])</label>
-                    <textarea id="import-json-data" style="width:100%; height:120px; font-family: monospace; font-size: 0.8rem; background: rgba(0,0,0,0.3); color: #fff; padding: 10px; border-radius: 8px; border: 1px solid var(--border);"></textarea>
-                </div>
-                <div class="input-group" style="margin-top: 15px;">
-                    <label>Ou faça Upload de Arquivo (Excel, CSV, PDF, DOCX)</label>
-                    <input type="file" id="import-file" accept=".xlsx,.xls,.csv,.pdf,.docx" style="background: rgba(0,0,0,0.3); padding: 10px; width: 100%; border-radius: 8px; color: #fff;">
-                    <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 5px;">* Arquivos PDF/DOCX tentaremos extrair nomes e contatos automaticamente.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline" onclick="App.closeModal('modal-import-estagiarios')">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="handleImport()">Processar Importação</button>
-                </div>
-            </div>
+      <div
+        class="modal-backdrop"
+        onclick="App.closeModal('modal-import-estagiarios')"
+      ></div>
+      <div class="modal-content glass-card" style="max-width: 600px">
+        <div class="modal-header">
+          <h3>Importar Lista Massiva</h3>
+          <button
+            class="btn-close"
+            onclick="App.closeModal('modal-import-estagiarios')"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         </div>
+        <div class="modal-body">
+          <p class="text-muted" style="margin-bottom: 20px">
+            Cole abaixo o JSON com a lista de estagiários.
+          </p>
+          <div class="input-group">
+            <label
+              >Dados em JSON (Ex: [{"nome": "Joao", "email": "joao@ex"
+              }])</label
+            >
+            <textarea
+              id="import-json-data"
+              style="
+                width: 100%;
+                height: 120px;
+                font-family: monospace;
+                font-size: 0.8rem;
+                background: rgba(0, 0, 0, 0.3);
+                color: #fff;
+                padding: 10px;
+                border-radius: 8px;
+                border: 1px solid var(--border);
+              "
+            ></textarea>
+          </div>
+          <div class="input-group" style="margin-top: 15px">
+            <label>Ou faça Upload de Arquivo (Excel, CSV, PDF, DOCX)</label>
+            <input
+              type="file"
+              id="import-file"
+              accept=".xlsx,.xls,.csv,.pdf,.docx"
+              style="
+                background: rgba(0, 0, 0, 0.3);
+                padding: 10px;
+                width: 100%;
+                border-radius: 8px;
+                color: #fff;
+              "
+            />
+            <p
+              style="
+                font-size: 0.7rem;
+                color: var(--text-muted);
+                margin-top: 5px;
+              "
+            >
+              * Arquivos PDF/DOCX tentaremos extrair nomes e contatos
+              automaticamente.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline"
+              onclick="App.closeModal('modal-import-estagiarios')"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="handleImport()"
+            >
+              Processar Importação
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Modal Adicionar Estagiário -->
     <div class="modal hidden" id="modal-add-estagiario">
-        <div class="modal-backdrop" onclick="App.closeModal('modal-add-estagiario')"></div>
-        <div class="modal-content glass-card">
-            <div class="modal-header">
-                <h3>Novo Estagiário</h3>
-                <button class="btn-close" onclick="App.closeModal('modal-add-estagiario')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-                <form id="form-add-estagiario">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                        <div class="input-group">
-                            <label>Nome Completo</label>
-                            <input type="text" id="estagiario-nome" required placeholder="Ex: Noemi Nelembe">
-                        </div>
-                        <div class="input-group">
-                            <label>Dados Escolares</label>
-                            <input type="text" id="estagiario-classe" placeholder="Ex: 13ª Classe, Turma A">
-                        </div>
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                        <div class="input-group">
-                            <label>Email (opcional)</label>
-                            <input type="email" id="estagiario-email" placeholder="email@exemplo.com">
-                        </div>
-                        <div class="input-group">
-                            <label>Telefone (opcional)</label>
-                            <input type="text" id="estagiario-telefone" placeholder="Telefone">
-                        </div>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
-                        <div class="input-group">
-                            <label>Data Início</label>
-                            <input type="date" id="estagiario-inicio">
-                        </div>
-                        <div class="input-group">
-                            <label>Data Fim</label>
-                            <input type="date" id="estagiario-fim">
-                        </div>
-                        <div class="input-group">
-                            <label>Total de Horas</label>
-                            <input type="text" id="estagiario-horas" placeholder="Ex: 400h">
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline" onclick="App.closeModal('modal-add-estagiario')">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Adicionar</button>
-                    </div>
-                </form>
-            </div>
+      <div
+        class="modal-backdrop"
+        onclick="App.closeModal('modal-add-estagiario')"
+      ></div>
+      <div class="modal-content glass-card">
+        <div class="modal-header">
+          <h3>Novo Estagiário</h3>
+          <button
+            class="btn-close"
+            onclick="App.closeModal('modal-add-estagiario')"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         </div>
+        <div class="modal-body">
+          <form id="form-add-estagiario">
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px"
+            >
+              <div class="input-group">
+                <label>Nome Completo</label>
+                <input
+                  type="text"
+                  id="estagiario-nome"
+                  required
+                  placeholder="Ex: Noemi Nelembe"
+                />
+              </div>
+              <div class="input-group">
+                <label>Dados Escolares</label>
+                <input
+                  type="text"
+                  id="estagiario-classe"
+                  placeholder="Ex: 13ª Classe, Turma A"
+                />
+              </div>
+            </div>
+
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px"
+            >
+              <div class="input-group">
+                <label>Email (opcional)</label>
+                <input
+                  type="email"
+                  id="estagiario-email"
+                  placeholder="email@exemplo.com"
+                />
+              </div>
+              <div class="input-group">
+                <label>Telefone (opcional)</label>
+                <input
+                  type="text"
+                  id="estagiario-telefone"
+                  placeholder="Telefone"
+                />
+              </div>
+            </div>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 16px;
+              "
+            >
+              <div class="input-group">
+                <label>Data Início</label>
+                <input type="date" id="estagiario-inicio" />
+              </div>
+              <div class="input-group">
+                <label>Data Fim</label>
+                <input type="date" id="estagiario-fim" />
+              </div>
+              <div class="input-group">
+                <label>Total de Horas</label>
+                <input
+                  type="text"
+                  id="estagiario-horas"
+                  placeholder="Ex: 400h"
+                />
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-outline"
+                onclick="App.closeModal('modal-add-estagiario')"
+              >
+                Cancelar
+              </button>
+              <button type="submit" class="btn btn-primary">Adicionar</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
 
     <script src="js/common.js"></script>
     <script>
-        const params = App.getQueryParams();
-        const turmaId = params.id;
+      const params = App.getQueryParams();
+      const turmaId = params.id;
 
-        if (!turmaId) {
-            window.location.href = 'home.html';
+      if (!turmaId) {
+        window.location.href = "home.html";
+      }
+
+      async function loadTurma() {
+        try {
+          const turma = await App.request(`/turmas/${turmaId}`);
+          currentTurmaData = turma; // Guardar dados para edição
+
+          document.getElementById("turma-nome-display").textContent =
+            turma.nome;
+          document.getElementById("turma-duracao-display").textContent =
+            turma.duracao;
+          document.getElementById("turma-tipo-display").textContent =
+            turma.tipoFormacao;
+          document.getElementById("turma-responsavel-display").textContent =
+            turma.responsavel;
+          document.getElementById("turma-count-display").textContent =
+            turma.estagiarios.length;
+
+          renderStudents(turma.estagiarios);
+        } catch (err) {
+          console.error(err);
+          App.showNotification("Erro ao carregar dados da turma", "error");
+          setTimeout(() => (window.location.href = "home.html"), 2000);
         }
+      }
 
-        async function loadTurma() {
-            try {
-                const turma = await App.request(`/turmas/${turmaId}`);
-                
-                document.getElementById('turma-nome-display').textContent = turma.nome;
-                document.getElementById('turma-duracao-display').textContent = turma.duracao;
-                document.getElementById('turma-tipo-display').textContent = turma.tipoFormacao;
-                document.getElementById('turma-responsavel-display').textContent = turma.responsavel;
-                document.getElementById('turma-count-display').textContent = turma.estagiarios.length;
+      function renderStudents(students) {
+        const list = document.getElementById("students-list");
 
-                renderStudents(turma.estagiarios);
-            } catch (err) {
-                console.error(err);
-                App.showNotification('Erro ao carregar dados da turma', 'error');
-                setTimeout(() => window.location.href = 'home.html', 2000);
-            }
-        }
-
-        function renderStudents(students) {
-            const list = document.getElementById('students-list');
-            
-            if (students.length === 0) {
-                list.innerHTML = `
+        if (students.length === 0) {
+          list.innerHTML = `
                     <div class="empty-students">
                         <i class="fa-solid fa-user-slash" style="font-size: 2rem; display: block; margin-bottom: 10px; opacity: 0.5;"></i>
                         Nenhum estagiário cadastrado nesta turma.
                     </div>
                 `;
-                return;
+          return;
+        }
+
+        list.innerHTML = students
+          .map((s) => {
+            // Cálculo simples de desempenho baseado na nota escola ou média fictícia se novo
+            const nota = s.notaEscola || 10;
+            let desempenho = "Regular";
+            let badgeClass = "";
+
+            if (nota >= 18) {
+              desempenho = "Excelente";
+              badgeClass = "badge-success";
+            } else if (nota >= 14) {
+              desempenho = "Bom";
+              badgeClass = "badge-primary";
+            } else if (nota >= 10) {
+              desempenho = "Satisfatório";
+              badgeClass = "badge-warning";
+            } else {
+              desempenho = "Insatisfatório";
+              badgeClass = "badge-danger";
             }
 
-            list.innerHTML = students.map(s => {
-                // Cálculo simples de desempenho baseado na nota escola ou média fictícia se novo
-                const nota = s.notaEscola || 10;
-                let desempenho = 'Regular';
-                let badgeClass = '';
-
-                if (nota >= 18) { desempenho = 'Excelente'; badgeClass = 'badge-success'; }
-                else if (nota >= 14) { desempenho = 'Bom'; badgeClass = 'badge-primary'; }
-                else if (nota >= 10) { desempenho = 'Satisfatório'; badgeClass = 'badge-warning'; }
-                else { desempenho = 'Insatisfatório'; badgeClass = 'badge-danger'; }
-
-                return `
+            return `
                     <div class="student-item">
                         <div class="student-info">
                             <div class="student-avatar">${s.nome.charAt(0).toUpperCase()}</div>
@@ -345,14 +549,14 @@
                                     <strong class="hover-primary">${s.nome}</strong>
                                 </a>
                                 <div class="text-muted" style="font-size: 0.85rem;">
-                                    ${s.email || 'Sem email'} | Desempenho: <span class="badge ${badgeClass}">${desempenho}</span>
+                                    ${s.email || "Sem email"} | Desempenho: <span class="badge ${badgeClass}">${desempenho}</span>
                                 </div>
                             </div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div style="text-align: right;">
                                 <div style="font-size: 0.75rem; color: var(--text-muted);">Nota Final</div>
-                                <div style="font-weight: 700; color: var(--primary);">${s.notaEscola || '—'}</div>
+                                <div style="font-weight: 700; color: var(--primary);">${s.notaEscola || "—"}</div>
                             </div>
                             <button class="btn btn-outline" onclick="window.location.href='relatorio.html?turmaId=${turmaId}&id=${s.id}'" title="Relatório">
                                 <i class="fa-solid fa-file-export"></i>
@@ -363,88 +567,150 @@
                         </div>
                     </div>
                 `;
-            }).join('');
+          })
+          .join("");
+      }
+
+      async function handleImport() {
+        const jsonText = document.getElementById("import-json-data").value;
+        const fileInput = document.getElementById("import-file");
+        const file = fileInput.files[0];
+
+        if (!jsonText && !file) {
+          App.showNotification("Cole o JSON ou selecione um arquivo.", "error");
+          return;
         }
 
-        async function handleImport() {
-            const jsonText = document.getElementById('import-json-data').value;
-            const fileInput = document.getElementById('import-file');
-            const file = fileInput.files[0];
+        try {
+          let body;
 
-            if (!jsonText && !file) {
-                App.showNotification('Cole o JSON ou selecione um arquivo.', 'error');
-                return;
-            }
+          if (file) {
+            body = new FormData();
+            body.append("file", file);
+          } else {
+            const estagiarios = JSON.parse(jsonText);
+            body = JSON.stringify({ estagiarios });
+          }
 
-            try {
-                let body;
+          await App.request(`/turmas/${turmaId}/estagiarios/import`, {
+            method: "POST",
+            body: body,
+          });
 
-                if (file) {
-                    body = new FormData();
-                    body.append('file', file);
-                } else {
-                    const estagiarios = JSON.parse(jsonText);
-                    body = JSON.stringify({ estagiarios });
-                }
-
-                await App.request(`/turmas/${turmaId}/estagiarios/import`, {
-                    method: 'POST',
-                    body: body
-                });
-
-                App.closeModal('modal-import-estagiarios');
-                App.showNotification('Importação concluída com sucesso!');
-                loadTurma();
-            } catch (err) {
-                App.showNotification('Erro na importação', 'error');
-            }
+          App.closeModal("modal-import-estagiarios");
+          App.showNotification("Importação concluída com sucesso!");
+          loadTurma();
+        } catch (err) {
+          App.showNotification("Erro na importação", "error");
         }
+      }
 
-        document.getElementById('form-add-estagiario').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const data = {
-                nome: document.getElementById('estagiario-nome').value,
-                email: document.getElementById('estagiario-email').value,
-                telefone: document.getElementById('estagiario-telefone').value,
-                classe: document.getElementById('estagiario-classe').value,
-                dataInicio: document.getElementById('estagiario-inicio').value,
-                dataFim: document.getElementById('estagiario-fim').value,
-                totalHoras: document.getElementById('estagiario-horas').value
-            };
+      document
+        .getElementById("form-add-estagiario")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const data = {
+            nome: document.getElementById("estagiario-nome").value,
+            email: document.getElementById("estagiario-email").value,
+            telefone: document.getElementById("estagiario-telefone").value,
+            classe: document.getElementById("estagiario-classe").value,
+            dataInicio: document.getElementById("estagiario-inicio").value,
+            dataFim: document.getElementById("estagiario-fim").value,
+            totalHoras: document.getElementById("estagiario-horas").value,
+          };
 
-            try {
-                await App.request(`/turmas/${turmaId}/estagiarios`, {
-                    method: 'POST',
-                    body: JSON.stringify(data)
-                });
+          try {
+            await App.request(`/turmas/${turmaId}/estagiarios`, {
+              method: "POST",
+              body: JSON.stringify(data),
+            });
 
-                App.closeModal('modal-add-estagiario');
-                App.showNotification('Estagiário adicionado com sucesso!');
-                loadTurma();
-            } catch (err) {
-                App.showNotification('Erro ao adicionar estagiário', 'error');
-            }
+            App.closeModal("modal-add-estagiario");
+            App.showNotification("Estagiário adicionado com sucesso!");
+            loadTurma();
+          } catch (err) {
+            App.showNotification("Erro ao adicionar estagiário", "error");
+          }
         });
 
-        async function removeStudent(id) {
-            if (!confirm('Tem certeza que deseja remover este estagiário?')) return;
+      async function removeStudent(id) {
+        if (!confirm("Tem certeza que deseja remover este estagiário?")) return;
 
-            try {
-                await App.request(`/turmas/${turmaId}/estagiarios/${id}`, {
-                    method: 'DELETE'
-                });
-                App.showNotification('Estagiário removido');
-                loadTurma();
-            } catch (err) {
-                App.showNotification('Erro ao remover estagiário', 'error');
-            }
+        try {
+          await App.request(`/turmas/${turmaId}/estagiarios/${id}`, {
+            method: "DELETE",
+          });
+          App.showNotification("Estagiário removido");
+          loadTurma();
+        } catch (err) {
+          App.showNotification("Erro ao remover estagiário", "error");
         }
+      }
 
-        // Init
-        (async () => {
-            await App.checkAuth();
+      let currentTurmaData = null;
+
+      function openEditTurmaModal() {
+        if (!currentTurmaData) return;
+        document.getElementById("edit-turma-nome").value =
+          currentTurmaData.nome;
+        document.getElementById("edit-turma-duracao").value =
+          currentTurmaData.duracao;
+        document.getElementById("edit-turma-tipo").value =
+          currentTurmaData.tipoFormacao;
+        document.getElementById("edit-turma-responsavel").value =
+          currentTurmaData.responsavel;
+        App.openModal("modal-edit-turma");
+      }
+
+      document
+        .getElementById("form-edit-turma")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const data = {
+            nome: document.getElementById("edit-turma-nome").value,
+            duracao: document.getElementById("edit-turma-duracao").value,
+            tipoFormacao: document.getElementById("edit-turma-tipo").value,
+            responsavel: document.getElementById("edit-turma-responsavel")
+              .value,
+          };
+
+          try {
+            await App.request(`/turmas/${turmaId}`, {
+              method: "PATCH",
+              body: JSON.stringify(data),
+            });
+            App.closeModal("modal-edit-turma");
+            App.showNotification("Turma atualizada com sucesso!");
             loadTurma();
-        })();
+          } catch (err) {
+            App.showNotification("Erro ao atualizar turma", "error");
+          }
+        });
+
+      async function deleteTurma() {
+        if (
+          !confirm(
+            "Tem certeza que deseja EXCLUIR esta turma e TODOS os seus estagiários? Esta ação não pode ser desfeita.",
+          )
+        )
+          return;
+
+        try {
+          await App.request(`/turmas/${turmaId}`, {
+            method: "DELETE",
+          });
+          App.showNotification("Turma excluída com sucesso!");
+          setTimeout(() => (window.location.href = "home.html"), 1500);
+        } catch (err) {
+          App.showNotification("Erro ao excluir turma", "error");
+        }
+      }
+
+      // Init
+      (async () => {
+        await App.checkAuth();
+        loadTurma();
+      })();
     </script>
-</body>
+  </body>
 </html>

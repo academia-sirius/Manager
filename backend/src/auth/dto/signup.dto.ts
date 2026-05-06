@@ -17,6 +17,10 @@ export class SignupDto {
   @IsString()
   nome!: string;
 
+  @IsNotEmpty({ message: 'NIF é obrigatório' })
+  @IsString()
+  nif!: string;
+
   @IsNotEmpty({ message: 'Tipo/Área de atuação é obrigatório' })
   @IsString()
   tipo!: string;
@@ -31,9 +35,9 @@ export class SignupDto {
 
   @IsOptional()
   @IsString()
-  corPrimaria?: string;
+  localizacao?: string;
 
   @IsOptional()
   @IsString()
-  corSecundaria?: string;
+  telefone?: string;
 }

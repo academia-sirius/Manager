@@ -48,6 +48,19 @@ export class TurmaService {
     return this.prisma.turma.delete({ where: { id } });
   }
 
+  async update(
+    id: number,
+    centroId: number,
+    data: { nome?: string; duracao?: string; tipoFormacao?: string; responsavel?: string },
+  ) {
+    const turma = await this.prisma.turma.findUnique({ where: { id } });
+    if (!turma) throw new NotFoundException('Turma não encontrada');
+    if (turma.centroId !== centroId) throw new ForbiddenException('Acesso negado');
+
+    return this.prisma.turma.update({ where: { id }, data });
+  }
+
+
   async addEstagiario(
     turmaId: number,
     centroId: number,

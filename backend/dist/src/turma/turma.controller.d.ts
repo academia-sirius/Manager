@@ -18,13 +18,16 @@ export declare class TurmaController {
         centroId: number;
     })[]>;
     findOne(id: number, req: any): Promise<{
+        _count: {
+            estagiarios: number;
+        };
         estagiarios: {
             email: string | null;
             nome: string;
+            telefone: string | null;
             id: number;
             createdAt: Date;
             turmaId: number;
-            telefone: string | null;
             classe: string | null;
             dataInicio: string | null;
             dataFim: string | null;
@@ -54,9 +57,6 @@ export declare class TurmaController {
             notaEmpresa: number | null;
             notaEscola: number | null;
         }[];
-        _count: {
-            estagiarios: number;
-        };
     } & {
         nome: string;
         id: number;
@@ -84,13 +84,22 @@ export declare class TurmaController {
         responsavel: string;
         centroId: number;
     }>;
-    addEstagiario(id: number, req: any, data: any): Promise<{
-        email: string | null;
+    update(id: number, req: any, data: any): Promise<{
         nome: string;
         id: number;
         createdAt: Date;
-        turmaId: number;
+        duracao: string;
+        tipoFormacao: string;
+        responsavel: string;
+        centroId: number;
+    }>;
+    addEstagiario(id: number, req: any, data: any): Promise<{
+        email: string | null;
+        nome: string;
         telefone: string | null;
+        id: number;
+        createdAt: Date;
+        turmaId: number;
         classe: string | null;
         dataInicio: string | null;
         dataFim: string | null;
@@ -142,11 +151,12 @@ export declare class TurmaController {
                 email: string;
                 senha: string;
                 nome: string;
+                nif: string;
                 tipo: string;
                 slogan: string | null;
                 descricao: string | null;
-                corPrimaria: string | null;
-                corSecundaria: string | null;
+                localizacao: string | null;
+                telefone: string | null;
                 id: number;
                 logo: string | null;
                 createdAt: Date;
@@ -170,10 +180,10 @@ export declare class TurmaController {
         }[];
         email: string | null;
         nome: string;
+        telefone: string | null;
         id: number;
         createdAt: Date;
         turmaId: number;
-        telefone: string | null;
         classe: string | null;
         dataInicio: string | null;
         dataFim: string | null;
@@ -206,10 +216,10 @@ export declare class TurmaController {
     updateEstagiario(id: number, estagiarioId: number, req: any, data: any): Promise<{
         email: string | null;
         nome: string;
+        telefone: string | null;
         id: number;
         createdAt: Date;
         turmaId: number;
-        telefone: string | null;
         classe: string | null;
         dataInicio: string | null;
         dataFim: string | null;
@@ -242,10 +252,10 @@ export declare class TurmaController {
     removeEstagiario(id: number, estagiarioId: number, req: any): Promise<{
         email: string | null;
         nome: string;
+        telefone: string | null;
         id: number;
         createdAt: Date;
         turmaId: number;
-        telefone: string | null;
         classe: string | null;
         dataInicio: string | null;
         dataFim: string | null;

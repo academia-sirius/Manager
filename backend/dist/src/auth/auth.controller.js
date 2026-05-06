@@ -20,6 +20,7 @@ const path_1 = require("path");
 const auth_service_js_1 = require("./auth.service.js");
 const signup_dto_js_1 = require("./dto/signup.dto.js");
 const login_dto_js_1 = require("./dto/login.dto.js");
+const password_reset_dto_js_1 = require("./dto/password-reset.dto.js");
 const jwt_auth_guard_js_1 = require("./guards/jwt-auth.guard.js");
 let AuthController = class AuthController {
     authService;
@@ -38,6 +39,15 @@ let AuthController = class AuthController {
     }
     async logout() {
         return { message: 'Logout realizado com sucesso' };
+    }
+    async forgotPassword(dto) {
+        return this.authService.forgotPassword(dto);
+    }
+    async verifyCode(dto) {
+        return this.authService.verifyCode(dto);
+    }
+    async resetPassword(dto) {
+        return this.authService.resetPassword(dto);
     }
 };
 exports.AuthController = AuthController;
@@ -87,6 +97,27 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "logout", null);
+__decorate([
+    (0, common_1.Post)('forgot-password'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [password_reset_dto_js_1.ForgotPasswordDto]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "forgotPassword", null);
+__decorate([
+    (0, common_1.Post)('verify-code'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [password_reset_dto_js_1.VerifyCodeDto]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "verifyCode", null);
+__decorate([
+    (0, common_1.Post)('reset-password'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [password_reset_dto_js_1.ResetPasswordDto]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "resetPassword", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_js_1.AuthService])

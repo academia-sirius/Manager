@@ -5,11 +5,12 @@ export declare class CentroController {
     getProfile(req: any): Promise<{
         email: string;
         nome: string;
+        nif: string;
         tipo: string;
         slogan: string | null;
         descricao: string | null;
-        corPrimaria: string | null;
-        corSecundaria: string | null;
+        localizacao: string | null;
+        telefone: string | null;
         id: number;
         logo: string | null;
         createdAt: Date;
@@ -22,11 +23,12 @@ export declare class CentroController {
     }>): Promise<{
         email: string;
         nome: string;
+        nif: string;
         tipo: string;
         slogan: string | null;
         descricao: string | null;
-        corPrimaria: string | null;
-        corSecundaria: string | null;
+        localizacao: string | null;
+        telefone: string | null;
         id: number;
         logo: string | null;
         createdAt: Date;

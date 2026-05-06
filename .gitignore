@@ -4,6 +4,7 @@ node_modules/
 
 # Builds
 dist/
+**/dist/
 build/
 
 # Bases de dados locais
@@ -17,6 +18,7 @@ build/
 
 # Uploads locais
 backend/uploads/
+Downloads/
 
 # Logs
 *.log

@@ -11,18 +11,19 @@ datasource db {
 }
 
 model Centro {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  senha     String
-  nome      String
-  tipo      String
-  logo      String?
-  slogan    String?
-  descricao String?
-  corPrimaria String? @default("#6366f1")
-  corSecundaria String? @default("#ec4899")
-  createdAt DateTime @default(now())
-  turmas    Turma[]
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  senha       String
+  nome        String   @unique
+  nif         String   @unique
+  tipo        String
+  logo        String?
+  slogan      String?
+  descricao   String?
+  localizacao String?
+  telefone    String?
+  createdAt   DateTime @default(now())
+  turmas      Turma[]
 }
 
 model Turma {
@@ -44,7 +45,7 @@ model Estagiario {
   telefone        String?
   
   // Identificação e Contexto
-  classe          String?   // Ex: 13ª Classe, Turma A
+  classe          String?
   dataInicio      String?
   dataFim         String?
   totalHoras      String?
@@ -57,7 +58,7 @@ model Estagiario {
   orientadorNome   String?
   orientadorFuncao String?
   
-  // Matriz de Avaliação (15 Parâmetros) - Agora Numéricos (0 a 20)
+  // Matriz de Avaliação (15 Parâmetros) - Numéricos (0 a 20)
   crit1_assiduidade      Float? @default(10)
   crit2_pontualidade     Float? @default(10)
   crit3_disciplina       Float? @default(10)
@@ -95,4 +96,13 @@ model RegistroDiario {
   
   estagiarioId            Int
   estagiario              Estagiario @relation(fields: [estagiarioId], references: [id])
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  email     String
+  code      String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
 }

@@ -18,16 +18,27 @@ let CentroService = class CentroService {
         this.prisma = prisma;
     }
     async getProfile(centroId) {
-        const centro = await this.prisma.centro.findUnique({
-            where: { id: centroId },
-        });
-        if (!centro) {
+        const centro = await this.prisma.centro.findUnique({ where: { id: centroId } });
+        if (!centro)
             throw new common_1.NotFoundException('Centro não encontrado');
-        }
         const { senha: _, ...centroSemSenha } = centro;
         return centroSemSenha;
     }
     async updateProfile(centroId, data) {
+        if (data.nome) {
+            const existing = await this.prisma.centro.findFirst({
+                where: { nome: data.nome, NOT: { id: centroId } },
+            });
+            if (existing)
+                throw new common_1.ConflictException('Já existe um centro com este nome');
+        }
+        if (data.nif) {
+            const existing = await this.prisma.centro.findFirst({
+                where: { nif: data.nif, NOT: { id: centroId } },
+            });
+            if (existing)
+                throw new common_1.ConflictException('Já existe um centro com este NIF');
+        }
         const centro = await this.prisma.centro.update({
             where: { id: centroId },
             data,

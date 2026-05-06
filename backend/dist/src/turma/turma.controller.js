@@ -37,6 +37,9 @@ let TurmaController = class TurmaController {
     async remove(id, req) {
         return this.turmaService.remove(id, req.user.id);
     }
+    async update(id, req, data) {
+        return this.turmaService.update(id, req.user.id, data);
+    }
     async addEstagiario(id, req, data) {
         return this.turmaService.addEstagiario(id, req.user.id, data);
     }
@@ -97,6 +100,15 @@ __decorate([
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], TurmaController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Request)()),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object, Object]),
+    __metadata("design:returntype", Promise)
+], TurmaController.prototype, "update", null);
 __decorate([
     (0, common_1.Post)(':id/estagiarios'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),

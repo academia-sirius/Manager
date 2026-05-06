@@ -14,6 +14,7 @@ import { extname } from 'path';
 import { AuthService } from './auth.service.js';
 import { SignupDto } from './dto/signup.dto.js';
 import { LoginDto } from './dto/login.dto.js';
+import { ForgotPasswordDto, VerifyCodeDto, ResetPasswordDto } from './dto/password-reset.dto.js';
 import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 
 @Controller('auth')
@@ -36,7 +37,7 @@ export class AuthController {
         }
         cb(null, true);
       },
-      limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+      limits: { fileSize: 5 * 1024 * 1024 },
     }),
   )
   async signup(
@@ -61,8 +62,23 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('logout')
   async logout() {
-    // JWT é stateless — o logout é feito no client removendo o token.
-    // Esta rota existe para manter a semântica da API.
     return { message: 'Logout realizado com sucesso' };
+  }
+
+  // ─── Recuperação de Senha ─────────────────────────────────────────────────
+
+  @Post('forgot-password')
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(dto);
+  }
+
+  @Post('verify-code')
+  async verifyCode(@Body() dto: VerifyCodeDto) {
+    return this.authService.verifyCode(dto);
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    return this.authService.resetPassword(dto);
   }
 }

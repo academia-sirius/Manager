@@ -32,6 +32,16 @@ export class TurmaController {
     return this.turmaService.remove(id, req.user.id);
   }
 
+  @Patch(':id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req: any,
+    @Body() data: any,
+  ) {
+    return this.turmaService.update(id, req.user.id, data);
+  }
+
+
   @Post(':id/estagiarios')
   async addEstagiario(
     @Param('id', ParseIntPipe) id: number,
@@ -40,6 +50,7 @@ export class TurmaController {
   ) {
     return this.turmaService.addEstagiario(id, req.user.id, data);
   }
+
 
   @Post(':id/estagiarios/import')
   @UseInterceptors(FileInterceptor('file'))
