@@ -610,7 +610,10 @@
         const logoContainer = document.getElementById("header-logo-container");
         const logoUrl = App.getLogoUrl(centro.logo);
         if (logoUrl) {
-          logoContainer.innerHTML = `<img src="${logoUrl}" alt="Logo" class="header-logo">`;
+          logoContainer.innerHTML = `
+            <img src="${logoUrl}" alt="Logo" class="header-logo" onerror="this.style.display='none'; document.getElementById('header-logo-fallback').style.display='flex';">
+            <div id="header-logo-fallback" class="header-logo-placeholder" style="display:none">${centro.nome.charAt(0).toUpperCase()}</div>
+          `;
         } else {
           logoContainer.innerHTML = `<div class="header-logo-placeholder">${centro.nome.charAt(0).toUpperCase()}</div>`;
         }
@@ -626,7 +629,10 @@
           "profile-logo-display",
         );
         if (logoUrl) {
-          profileLogoDisplay.innerHTML = `<img src="${logoUrl}" alt="Logo do Centro">`;
+          profileLogoDisplay.innerHTML = `
+            <img src="${logoUrl}" alt="Logo do Centro" onerror="this.style.display='none'; document.getElementById('profile-logo-fallback').style.display='flex';">
+            <div id="profile-logo-fallback" class="logo-fallback" style="display:none">${centro.nome.charAt(0).toUpperCase()}</div>
+          `;
         } else {
           profileLogoDisplay.innerHTML = `<div class="logo-fallback">${centro.nome.charAt(0).toUpperCase()}</div>`;
         }

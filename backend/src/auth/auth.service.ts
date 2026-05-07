@@ -81,7 +81,15 @@ export class AuthService {
     const centro = await this.prisma.centro.findUnique({ where: { id: userId } });
     if (!centro) throw new UnauthorizedException('Centro não encontrado');
 
-    const dataToUpdate: any = { ...dto };
+    const dataToUpdate: any = {};
+    
+    // Apenas actualizar campos que não estão vazios
+    for (const key in dto) {
+      if (dto[key] !== undefined && dto[key] !== null && dto[key] !== '') {
+        dataToUpdate[key] = dto[key];
+      }
+    }
+
     if (logoFilename) {
       dataToUpdate.logo = logoFilename;
     }
