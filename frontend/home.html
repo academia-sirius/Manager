@@ -477,10 +477,54 @@
           </div>
         </div>
       </div>
-      <div class="profile-panel-footer">
+      <div class="profile-panel-footer" style="display: flex; flex-direction: column; gap: 10px;">
+        <button class="btn btn-primary w-100" onclick="openEditProfileModal()">
+          <i class="fa-solid fa-pen-to-square"></i> Editar Perfil
+        </button>
         <button class="btn btn-outline w-100" onclick="App.logout()">
           <i class="fa-solid fa-right-from-bracket"></i> Sair da Conta
         </button>
+      </div>
+    </div>
+
+    <!-- Modal Editar Perfil -->
+    <div class="modal hidden" id="modal-editar-perfil">
+      <div class="modal-backdrop" onclick="closeEditProfileModal()"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Editar Perfil</h2>
+          <button class="close-btn" onclick="closeEditProfileModal()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <form id="form-edit-profile">
+          <div class="form-group">
+            <label>Nome do Centro</label>
+            <input type="text" id="edit-nome" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Slogan</label>
+            <input type="text" id="edit-slogan" class="form-control">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+              <label>Telefone</label>
+              <input type="text" id="edit-telefone" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Localização</label>
+              <input type="text" id="edit-localizacao" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Nova Logo (opcional)</label>
+            <input type="file" id="edit-logo" class="form-control" accept="image/*" style="padding-top: 10px;">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" onclick="closeEditProfileModal()">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -716,6 +760,50 @@
 
         // Renderizar ao carregar
         renderTurmas();
+
+        // ===== EDITAR PERFIL =====
+        window.openEditProfileModal = () => {
+          document.getElementById("edit-nome").value = centro.nome || "";
+          document.getElementById("edit-slogan").value = centro.slogan || "";
+          document.getElementById("edit-telefone").value = centro.telefone || "";
+          document.getElementById("edit-localizacao").value = centro.localizacao || "";
+          App.openModal("modal-editar-perfil");
+        };
+
+        window.closeEditProfileModal = () => {
+          App.closeModal("modal-editar-perfil");
+        };
+
+        document.getElementById("form-edit-profile").addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = e.target.querySelector('button[type="submit"]');
+          btn.disabled = true;
+          btn.textContent = "A salvar...";
+
+          const formData = new FormData();
+          formData.append("nome", document.getElementById("edit-nome").value);
+          formData.append("slogan", document.getElementById("edit-slogan").value);
+          formData.append("telefone", document.getElementById("edit-telefone").value);
+          formData.append("localizacao", document.getElementById("edit-localizacao").value);
+
+          const logoInput = document.getElementById("edit-logo");
+          if (logoInput.files && logoInput.files[0]) {
+            formData.append("logo", logoInput.files[0]);
+          }
+
+          try {
+            await App.request("/auth/me", {
+              method: "PATCH",
+              body: formData
+            });
+            App.showNotification("Perfil atualizado com sucesso!");
+            setTimeout(() => location.reload(), 1000);
+          } catch (err) {
+            App.showNotification(err.message || "Erro ao atualizar perfil", "error");
+            btn.disabled = false;
+            btn.textContent = "Salvar Alterações";
+          }
+        });
       })();
     </script>
   </body>

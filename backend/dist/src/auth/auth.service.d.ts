@@ -18,13 +18,13 @@ export declare class AuthService {
             nome: string;
             nif: string;
             tipo: string;
+            logo: string | null;
             slogan: string | null;
             descricao: string | null;
             localizacao: string | null;
             telefone: string | null;
-            id: number;
-            logo: string | null;
             createdAt: Date;
+            id: number;
         };
     }>;
     getProfile(userId: number): Promise<{
@@ -32,13 +32,26 @@ export declare class AuthService {
         nome: string;
         nif: string;
         tipo: string;
+        logo: string | null;
         slogan: string | null;
         descricao: string | null;
         localizacao: string | null;
         telefone: string | null;
-        id: number;
-        logo: string | null;
         createdAt: Date;
+        id: number;
+    }>;
+    updateProfile(userId: number, dto: any, logoFilename?: string): Promise<{
+        email: string;
+        nome: string;
+        nif: string;
+        tipo: string;
+        logo: string | null;
+        slogan: string | null;
+        descricao: string | null;
+        localizacao: string | null;
+        telefone: string | null;
+        createdAt: Date;
+        id: number;
     }>;
     forgotPassword(dto: ForgotPasswordDto): Promise<{
         message: string;

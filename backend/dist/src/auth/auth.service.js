@@ -101,6 +101,21 @@ let AuthService = class AuthService {
         const { senha: _, ...centroSemSenha } = centro;
         return centroSemSenha;
     }
+    async updateProfile(userId, dto, logoFilename) {
+        const centro = await this.prisma.centro.findUnique({ where: { id: userId } });
+        if (!centro)
+            throw new common_1.UnauthorizedException('Centro não encontrado');
+        const dataToUpdate = { ...dto };
+        if (logoFilename) {
+            dataToUpdate.logo = logoFilename;
+        }
+        const updated = await this.prisma.centro.update({
+            where: { id: userId },
+            data: dataToUpdate,
+        });
+        const { senha: _, ...centroSemSenha } = updated;
+        return centroSemSenha;
+    }
     async forgotPassword(dto) {
         const centro = await this.prisma.centro.findUnique({ where: { email: dto.email } });
         if (!centro) {

@@ -2,6 +2,7 @@ import {
   Controller,
   Post,
   Get,
+  Patch,
   Body,
   UseGuards,
   Request,
@@ -14,6 +15,7 @@ import { extname } from 'path';
 import { AuthService } from './auth.service.js';
 import { SignupDto } from './dto/signup.dto.js';
 import { LoginDto } from './dto/login.dto.js';
+import { UpdateProfileDto } from './dto/update-profile.dto.js';
 import { ForgotPasswordDto, VerifyCodeDto, ResetPasswordDto } from './dto/password-reset.dto.js';
 import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 
@@ -57,6 +59,35 @@ export class AuthController {
   @Get('me')
   async getProfile(@Request() req: any) {
     return this.authService.getProfile(req.user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('me')
+  @UseInterceptors(
+    FileInterceptor('logo', {
+      storage: diskStorage({
+        destination: './uploads/logos',
+        filename: (_req, file, cb) => {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          cb(null, uniqueSuffix + extname(file.originalname));
+        },
+      }),
+      fileFilter: (_req, file, cb) => {
+        if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|webp|svg\+xml)$/)) {
+          return cb(new Error('Apenas imagens são permitidas'), false);
+        }
+        cb(null, true);
+      },
+      limits: { fileSize: 5 * 1024 * 1024 },
+    }),
+  )
+  async updateProfile(
+    @Request() req: any,
+    @Body() dto: UpdateProfileDto,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    const logoFilename = file ? file.filename : undefined;
+    return this.authService.updateProfile(req.user.id, dto, logoFilename);
   }
 
   @UseGuards(JwtAuthGuard)

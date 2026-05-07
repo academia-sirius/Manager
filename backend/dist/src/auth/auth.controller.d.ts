@@ -1,6 +1,7 @@
 import { AuthService } from './auth.service.js';
 import { SignupDto } from './dto/signup.dto.js';
 import { LoginDto } from './dto/login.dto.js';
+import { UpdateProfileDto } from './dto/update-profile.dto.js';
 import { ForgotPasswordDto, VerifyCodeDto, ResetPasswordDto } from './dto/password-reset.dto.js';
 export declare class AuthController {
     private authService;
@@ -16,13 +17,13 @@ export declare class AuthController {
             nome: string;
             nif: string;
             tipo: string;
+            logo: string | null;
             slogan: string | null;
             descricao: string | null;
             localizacao: string | null;
             telefone: string | null;
-            id: number;
-            logo: string | null;
             createdAt: Date;
+            id: number;
         };
     }>;
     getProfile(req: any): Promise<{
@@ -30,13 +31,26 @@ export declare class AuthController {
         nome: string;
         nif: string;
         tipo: string;
+        logo: string | null;
         slogan: string | null;
         descricao: string | null;
         localizacao: string | null;
         telefone: string | null;
-        id: number;
-        logo: string | null;
         createdAt: Date;
+        id: number;
+    }>;
+    updateProfile(req: any, dto: UpdateProfileDto, file?: Express.Multer.File): Promise<{
+        email: string;
+        nome: string;
+        nif: string;
+        tipo: string;
+        logo: string | null;
+        slogan: string | null;
+        descricao: string | null;
+        localizacao: string | null;
+        telefone: string | null;
+        createdAt: Date;
+        id: number;
     }>;
     logout(): Promise<{
         message: string;

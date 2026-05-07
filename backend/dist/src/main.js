@@ -23,7 +23,7 @@ async function bootstrap() {
         (0, fs_1.mkdirSync)(uploadsDir, { recursive: true });
     }
     app.useStaticAssets((0, path_1.join)(process.cwd(), 'uploads'), {
-        prefix: '/uploads/',
+        prefix: '/uploads',
     });
     const port = process.env.PORT || 4000;
     await app.listen(port);

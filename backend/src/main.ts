@@ -35,7 +35,7 @@ async function bootstrap() {
 
   // Servir arquivos estáticos (logos)
   app.useStaticAssets(join(process.cwd(), 'uploads'), {
-    prefix: '/uploads/',
+    prefix: '/uploads',
   });
 
   const port = process.env.PORT || 4000;
