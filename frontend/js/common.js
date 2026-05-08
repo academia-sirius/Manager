@@ -7,8 +7,8 @@ const App = {
         ? 'http://localhost:4000/api'
         : '/api',
 
-    // Helper para fazer requests à API com token JWT
-    request: async (endpoint, options = {}) => {
+    // Helper para fazer requests à API com token JWT (agora com retry e logs)
+    request: async (endpoint, options = {}, retries = 3, backoff = 300) => {
         const token = localStorage.getItem('manager_token');
         const headers = options.headers || {};
 
@@ -16,23 +16,47 @@ const App = {
             headers['Authorization'] = `Bearer ${token}`;
         }
 
-        // Se não for FormData, adicionar Content-Type json
         if (!(options.body instanceof FormData) && !headers['Content-Type']) {
             headers['Content-Type'] = 'application/json';
         }
 
-        const response = await fetch(`${App.API_URL}${endpoint}`, {
-            ...options,
-            headers,
-        });
+        const method = options.method || 'GET';
+        const url = `${App.API_URL}${endpoint}`;
+        
+        console.log(`[API Request] Iniciando ${method} ${url} (Tentativas restantes: ${retries})`);
+        
+        try {
+            const startTime = Date.now();
+            const response = await fetch(url, {
+                ...options,
+                headers,
+            });
 
-        const data = await response.json();
+            const endTime = Date.now();
+            console.log(`[API Response] ${method} ${url} - Status: ${response.status} (${endTime - startTime}ms)`);
 
-        if (!response.ok) {
-            throw { status: response.status, message: data.message || 'Erro na requisição' };
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw { status: response.status, message: data.message || 'Erro na requisição' };
+            }
+
+            return data;
+        } catch (error) {
+            console.error(`[API Error] Falha na requisição ${method} ${url}:`, error);
+            
+            // Retry se houver tentativas sobrando e se for um erro de rede ou status 5xx
+            const isServerError = error.status && error.status >= 500;
+            const isNetworkError = !error.status; // Falha no fetch (ex: timeout, cors)
+            
+            if (retries > 0 && (isServerError || isNetworkError)) {
+                console.log(`[API Retry] Tentando novamente em ${backoff}ms... (${retries} tentativas restantes)`);
+                await new Promise(resolve => setTimeout(resolve, backoff));
+                return App.request(endpoint, options, retries - 1, backoff * 2);
+            }
+            
+            throw error;
         }
-
-        return data;
     },
 
     // Retorna o centro de avaliação logado ou redireciona

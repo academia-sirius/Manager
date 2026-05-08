@@ -15,7 +15,11 @@ const prisma_module_js_1 = require("./prisma/prisma.module.js");
 const auth_module_js_1 = require("./auth/auth.module.js");
 const centro_module_js_1 = require("./centro/centro.module.js");
 const turma_module_js_1 = require("./turma/turma.module.js");
+const logger_middleware_js_1 = require("./logger.middleware.js");
 let AppModule = class AppModule {
+    configure(consumer) {
+        consumer.apply(logger_middleware_js_1.LoggerMiddleware).forRoutes('*');
+    }
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
